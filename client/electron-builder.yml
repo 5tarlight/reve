@@ -1,0 +1,12 @@
+appId: io.github.yeahx4
+productName: Reve Client
+copyright: Copyright © 2023 YEAHx4
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish: null
