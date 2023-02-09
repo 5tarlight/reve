@@ -48,7 +48,7 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
                         TextBundle::from_section(
                             LOGO,
                             TextStyle {
-                                font_size: 100.,
+                                font_size: 200.,
                                 color: Color::WHITE,
                                 font: asset.load("fonts/d2coding.ttf"),
                             },
