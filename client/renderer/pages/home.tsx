@@ -1,15 +1,13 @@
-import React from "react";
-import { styled } from "@mui/material";
+import { useEffect } from "react";
 
-const Root = styled("div")(({ theme }) => {
-  return {
-    textAlign: "center",
-    paddingTop: theme.spacing(4),
-  };
-});
-
-function Home() {
-  return <h1>Hello World</h1>;
-}
+const Home = () => {
+  useEffect(() => {
+    if (localStorage.getItem("login")) {
+      window.location.href = "/game";
+    } else {
+      window.location.href = "/login";
+    }
+  });
+};
 
 export default Home;
