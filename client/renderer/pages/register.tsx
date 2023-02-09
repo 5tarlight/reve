@@ -1,21 +1,22 @@
 import ClientBackground from "../components/ClientBackground";
 import ReveLogo from "../components/ReveLogo";
 
-const Login = () => {
+const Register = () => {
   return (
     <>
       <ClientBackground />
       <ReveLogo />
 
       <div className="form">
-        <h1>로그인</h1>
+        <h1>회원가입</h1>
         <input type="text" placeholder="아이디" />
         <input type="password" placeholder="비밀번호" />
+        <input type="password" placeholder="비밀번호 확인" />
         <div className="btn-container">
           <div className="other-action">
-            <a href="/register">회원가입</a>
+            <a href="/login">로그인</a>
           </div>
-          <button>로그인</button>
+          <button>회원가입</button>
         </div>
       </div>
 
@@ -89,4 +90,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
