@@ -3,6 +3,15 @@ use constants::LOGO;
 
 pub mod constants;
 
+#[derive(Resource)]
+#[allow(dead_code)]
+pub struct GameInfo {
+    username: String,
+    token: String,
+    server: String,
+    room: String,
+}
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
@@ -57,4 +66,22 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
                     );
                 });
         });
+
+    // Load args
+    let args = std::env::args().collect::<Vec<String>>();
+    dbg!(&args);
+
+    let username = args[1].clone();
+    let token = args[2].clone();
+    let server = args[3].clone();
+    let room = args[4].clone();
+
+    let game_info = GameInfo {
+        username,
+        token,
+        server,
+        room,
+    };
+
+    commands.insert_resource(game_info);
 }
