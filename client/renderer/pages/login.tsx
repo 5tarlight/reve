@@ -1,7 +1,40 @@
+import axios from "axios";
+import { useState } from "react";
 import ClientBackground from "../components/ClientBackground";
 import ReveLogo from "../components/ReveLogo";
+import { config } from "../lib/config";
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleClick = async () => {
+    if (!username || !password) {
+      setMessage("모든 항목을 입력해주세요.");
+      return;
+    }
+
+    try {
+      const res = await axios.post(config.server + "/login", {
+        username,
+        password,
+      });
+
+      localStorage.setItem("login", "true");
+      localStorage.setItem("username", username);
+
+      if (res.status === 200) {
+        setMessage("로그인에 성공했습니다.");
+        window.location.href = "/";
+      } else {
+        setMessage("로그인에 실패했습니다.");
+      }
+    } catch (e) {
+      setMessage("로그인에 실패했습니다.");
+    }
+  };
+
   return (
     <>
       <ClientBackground />
@@ -9,14 +42,33 @@ const Login = () => {
 
       <div className="form">
         <h1>로그인</h1>
-        <input type="text" placeholder="아이디" />
-        <input type="password" placeholder="비밀번호" />
+        <input
+          type="text"
+          placeholder="아이디"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="비밀번호"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <div className="btn-container">
           <div className="other-action">
             <a href="/register">회원가입</a>
           </div>
-          <button>로그인</button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleClick();
+            }}
+          >
+            로그인
+          </button>
         </div>
+        <div className="message">{message}</div>
       </div>
 
       <style jsx>
@@ -82,6 +134,10 @@ const Login = () => {
 
           .other-action a:hover {
             text-decoration: underline;
+          }
+
+          .message {
+            color: white;
           }
         `}
       </style>
