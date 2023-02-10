@@ -9,6 +9,8 @@ export const register = async (req: Request, res: Response) => {
 
   if (newPlayer(username, password)) {
     return res.status(200).send("User created");
+  } else {
+    return res.status(400).send("User already exists");
   }
 };
 

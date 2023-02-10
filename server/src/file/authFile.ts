@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { mkdir, writeFile } from "fs";
+import { existsSync, mkdir, writeFile } from "fs";
 import path from "path";
 
 const dir = path.join(__dirname, "..", "data/profiles");
@@ -32,7 +32,10 @@ export const newPlayer = (username: string, password: string) => {
   };
 
   const json = JSON.stringify(user);
-  const file = path.join(dir, `${user.id}.json`);
+  const file = path.join(dir, `${user.username}.json`);
+
+  if (existsSync(file)) return false;
+
   writeFile(file, json, (err) => {
     if (err) throw err;
   });
