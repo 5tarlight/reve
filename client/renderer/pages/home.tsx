@@ -4,7 +4,7 @@ import ReveLogo from "../components/ReveLogo";
 
 const Home = () => {
   useEffect(() => {
-    if (localStorage.getItem("login")) {
+    if (localStorage.getItem("login") === "true") {
       window.location.href = "/game";
     } else {
       window.location.href = "/login";

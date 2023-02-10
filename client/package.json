@@ -16,6 +16,9 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "@types/dotenv": "^8.2.0",
+    "axios": "^1.3.2",
+    "dotenv": "^16.0.3",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0"
   },
