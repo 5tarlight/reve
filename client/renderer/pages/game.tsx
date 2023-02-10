@@ -1,9 +1,14 @@
 import axios from "axios";
 import ClientBackground from "../components/ClientBackground";
+import { config } from "../lib/config";
 
 const Game = () => {
   const launch = async () => {
-    const res = await axios.get("/api/launch");
+    const res = await axios.get(
+      `/api/launch?username=${localStorage.getItem(
+        "username"
+      )}&token=${1}&server=${config.server}&room=${1}`
+    );
     console.log(res);
   };
 
