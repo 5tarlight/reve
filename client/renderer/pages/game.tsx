@@ -1,7 +1,11 @@
+import axios from "axios";
 import ClientBackground from "../components/ClientBackground";
 
 const Game = () => {
-  const launch = () => {};
+  const launch = async () => {
+    const res = await axios.get("/api/launch");
+    console.log(res);
+  };
 
   return (
     <>
