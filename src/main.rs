@@ -1,16 +1,5 @@
 use bevy::prelude::*;
-use constants::LOGO;
-
-pub mod constants;
-
-#[derive(Resource)]
-#[allow(dead_code)]
-pub struct GameInfo {
-    username: String,
-    token: String,
-    server: String,
-    room: String,
-}
+use reve::constants::{GameInfo, LOGO};
 
 fn main() {
     App::new()
