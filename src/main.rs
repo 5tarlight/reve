@@ -64,6 +64,8 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let token = args[2].clone();
     let server = args[3].clone();
     let room = args[4].clone();
+    let team = args[5].clone();
+    let champion = args[6].clone();
 
     let game_info = GameInfo {
         username,
