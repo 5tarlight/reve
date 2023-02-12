@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use reve::constants::{Champion, GameInfo, Team, Textures, GAREN, MAP};
 
 fn main() {
@@ -12,6 +13,7 @@ fn main() {
             },
             ..Default::default()
         }))
+        .add_plugin(WorldInspectorPlugin)
         .add_startup_system(setup)
         .add_startup_system_to_stage(StartupStage::PostStartup, init_game)
         .run();
@@ -55,7 +57,12 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     commands.insert_resource(textures);
 }
 
-fn init_game(mut commands: Commands, textures: Res<Textures>) {
+fn init_game(
+    mut commands: Commands,
+    textures: Res<Textures>,
+    mut cam_query: Query<&mut Transform, With<Camera2d>>,
+    game_info: Res<GameInfo>,
+) {
     commands.spawn(SpriteBundle {
         texture: textures.map.clone(),
         transform: Transform {
@@ -65,4 +72,16 @@ fn init_game(mut commands: Commands, textures: Res<Textures>) {
         },
         ..Default::default()
     });
+
+    let mut cam = cam_query.get_single_mut().unwrap();
+    match game_info.team {
+        Team::Blue => {
+            cam.translation.x = -4800.0;
+            cam.translation.y = -4400.0;
+        }
+        Team::Red => {
+            cam.translation.x = 5000.0;
+            cam.translation.y = 3800.0;
+        }
+    }
 }
