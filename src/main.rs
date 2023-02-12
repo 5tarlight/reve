@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use reve::constants::{GameInfo, LOGO};
+use reve::constants::{Champion, GameInfo, Team, Textures, GAREN, MAP};
 
 fn main() {
     App::new()
@@ -13,48 +13,12 @@ fn main() {
             ..Default::default()
         }))
         .add_startup_system(setup)
+        .add_startup_system_to_stage(StartupStage::PostStartup, init_game)
         .run();
 }
 
 fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     commands.spawn(Camera2dBundle::default());
-
-    // Spawn Logo
-    commands
-        .spawn(NodeBundle {
-            style: Style {
-                size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
-                justify_content: JustifyContent::Center,
-                ..Default::default()
-            },
-            ..Default::default()
-        })
-        .with_children(|parent| {
-            parent
-                .spawn(NodeBundle {
-                    style: Style {
-                        size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
-                        position_type: PositionType::Absolute,
-                        justify_content: JustifyContent::Center,
-                        align_items: AlignItems::FlexStart,
-                        ..default()
-                    },
-                    ..default()
-                })
-                .with_children(|parent| {
-                    parent.spawn(
-                        TextBundle::from_section(
-                            LOGO,
-                            TextStyle {
-                                font_size: 200.,
-                                color: Color::WHITE,
-                                font: asset.load("fonts/d2coding.ttf"),
-                            },
-                        )
-                        .with_text_alignment(TextAlignment::TOP_CENTER),
-                    );
-                });
-        });
 
     // Load args
     let args = std::env::args().collect::<Vec<String>>();
@@ -67,12 +31,38 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let team = args[5].clone();
     let champion = args[6].clone();
 
+    let champion = match champion.as_str() {
+        "Garen" => Champion::Garen,
+        _ => Champion::Garen,
+    };
+
     let game_info = GameInfo {
         username,
         token,
         server,
         room,
+        team: team.eq("red").then(|| Team::Red).unwrap_or(Team::Blue),
+        champion,
     };
 
     commands.insert_resource(game_info);
+
+    // Load assets
+    let textures = Textures {
+        map: asset.load(MAP),
+        garen: asset.load(GAREN),
+    };
+    commands.insert_resource(textures);
+}
+
+fn init_game(mut commands: Commands, textures: Res<Textures>) {
+    commands.spawn(SpriteBundle {
+        texture: textures.map.clone(),
+        transform: Transform {
+            translation: Vec3::new(0.0, 0.0, 1.0),
+            scale: Vec3::splat(1.), // TODO: Camera zoom
+            ..Default::default()
+        },
+        ..Default::default()
+    });
 }
