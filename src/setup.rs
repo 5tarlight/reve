@@ -7,7 +7,7 @@ use bevy::{
 };
 
 use crate::{
-    champion::{Champion, Champions},
+    champion::{Champion, Champions, MyPlayer},
     constants::{GameInfo, Team, Textures, GAREN, MAP},
 };
 
@@ -131,5 +131,6 @@ fn init_game(
             },
             ..Default::default()
         })
-        .insert(champ);
+        .insert(champ)
+        .insert(MyPlayer);
 }
