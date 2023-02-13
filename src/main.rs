@@ -2,6 +2,7 @@ use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use reve::{
     constants::{Champion, GameInfo, Team, Textures, GAREN, MAP},
+    input::InputPlugin,
     setup::SetupPlugin,
 };
 
@@ -18,6 +19,7 @@ fn main() {
         }))
         .add_plugin(WorldInspectorPlugin)
         .add_plugin(SetupPlugin)
+        .add_plugin(InputPlugin)
         .add_startup_system(setup)
         .run();
 }
