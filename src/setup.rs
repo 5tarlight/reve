@@ -1,16 +1,58 @@
 use bevy::{
-    prelude::{Camera2d, Commands, Plugin, Query, Res, StartupStage, Transform, Vec3, With},
+    prelude::{
+        AssetServer, Camera2d, Camera2dBundle, Commands, Plugin, Query, Res, StartupStage,
+        Transform, Vec3, With,
+    },
     sprite::SpriteBundle,
 };
 
-use crate::constants::{GameInfo, Team, Textures};
+use crate::constants::{Champion, GameInfo, Team, Textures, GAREN, MAP};
 
 pub struct SetupPlugin;
 
 impl Plugin for SetupPlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
-        app.add_startup_system_to_stage(StartupStage::PostStartup, init_game);
+        app.add_startup_system(setup)
+            .add_startup_system_to_stage(StartupStage::PostStartup, init_game);
     }
+}
+
+fn setup(mut commands: Commands, asset: Res<AssetServer>) {
+    commands.spawn(Camera2dBundle::default());
+
+    // Load args
+    let args = std::env::args().collect::<Vec<String>>();
+    dbg!(&args);
+
+    let username = args[1].clone();
+    let token = args[2].clone();
+    let server = args[3].clone();
+    let room = args[4].clone();
+    let team = args[5].clone();
+    let champion = args[6].clone();
+
+    let champion = match champion.as_str() {
+        "Garen" => Champion::Garen,
+        _ => Champion::Garen,
+    };
+
+    let game_info = GameInfo {
+        username,
+        token,
+        server,
+        room,
+        team: team.eq("red").then(|| Team::Red).unwrap_or(Team::Blue),
+        champion,
+    };
+
+    commands.insert_resource(game_info);
+
+    // Load assets
+    let textures = Textures {
+        map: asset.load(MAP),
+        garen: asset.load(GAREN),
+    };
+    commands.insert_resource(textures);
 }
 
 fn init_game(
