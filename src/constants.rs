@@ -1,5 +1,7 @@
 use bevy::prelude::{Handle, Image, Resource};
 
+use crate::champion::Champions;
+
 pub const MIN_MAP_X: f32 = -5140.0;
 pub const MIN_MAP_Y: f32 = -4580.0;
 pub const MAX_MAP_X: f32 = 5140.0;
@@ -15,13 +17,10 @@ pub struct Textures {
     pub garen: Handle<Image>,
 }
 
+#[derive(Clone, Copy)]
 pub enum Team {
     Red,
     Blue,
-}
-
-pub enum Champion {
-    Garen,
 }
 
 #[derive(Resource)]
@@ -31,5 +30,5 @@ pub struct GameInfo {
     pub server: String,
     pub room: String,
     pub team: Team,
-    pub champion: Champion,
+    pub champion: Champions,
 }

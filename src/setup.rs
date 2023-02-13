@@ -1,12 +1,15 @@
 use bevy::{
     prelude::{
-        AssetServer, Camera2d, Camera2dBundle, Commands, Plugin, Query, Res, StartupStage,
-        Transform, Vec3, With,
+        AssetServer, Camera2d, Camera2dBundle, Commands, Handle, Image, Plugin, Query, Res,
+        StartupStage, Transform, Vec3, With,
     },
-    sprite::SpriteBundle,
+    sprite::{Sprite, SpriteBundle},
 };
 
-use crate::constants::{Champion, GameInfo, Team, Textures, GAREN, MAP};
+use crate::{
+    champion::{Champion, Champions},
+    constants::{GameInfo, Team, Textures, GAREN, MAP},
+};
 
 pub struct SetupPlugin;
 
@@ -32,8 +35,8 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let champion = args[6].clone();
 
     let champion = match champion.as_str() {
-        "Garen" => Champion::Garen,
-        _ => Champion::Garen,
+        "Garen" => Champions::Garen,
+        _ => Champions::Garen,
     };
 
     let game_info = GameInfo {
@@ -61,6 +64,7 @@ fn init_game(
     mut cam_query: Query<&mut Transform, With<Camera2d>>,
     game_info: Res<GameInfo>,
 ) {
+    // Spawn Map
     commands.spawn(SpriteBundle {
         texture: textures.map.clone(),
         transform: Transform {
@@ -71,6 +75,7 @@ fn init_game(
         ..Default::default()
     });
 
+    // Move camera location depends on team
     let mut cam = cam_query.get_single_mut().unwrap();
     match game_info.team {
         Team::Blue => {
@@ -82,4 +87,49 @@ fn init_game(
             cam.translation.y = 3800.0;
         }
     }
+
+    // Spawn Player champion
+    let champ: Champion;
+    let img: Handle<Image>;
+
+    match game_info.champion {
+        Champions::Garen => {
+            champ = Champion {
+                max_hp: 690.,
+                hp: 690.,
+                grow_hp: 98.,
+                hp_gen: 8.,
+                grow_hp_gen: 0.5,
+                ad: 66.,
+                grow_ad: 4.5,
+                ap: 0.,
+                grow_ap: 0.,
+                attack_speed: 0.625,
+                grow_attack_speed: 3.65,
+                def_ad: 36.,
+                grow_def_ad: 4.2,
+                def_ap: 32.,
+                grow_def_ap: 1.55,
+                hit_range: 175.,
+                move_speed: 340.,
+                crit_prob: 0,
+                cooldown: 0.,
+                name: Champions::Garen,
+                team: game_info.team.clone(),
+            };
+            img = textures.garen.clone();
+        }
+    }
+
+    commands
+        .spawn(SpriteBundle {
+            texture: img,
+            transform: Transform {
+                scale: Vec3::splat(0.3),
+                translation: Vec3::new(-4800.0, -4400., 2.),
+                ..Default::default()
+            },
+            ..Default::default()
+        })
+        .insert(champ);
 }
