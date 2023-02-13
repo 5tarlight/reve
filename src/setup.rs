@@ -3,7 +3,7 @@ use bevy::{
         AssetServer, Camera2d, Camera2dBundle, Commands, Handle, Image, Plugin, Query, Res,
         StartupStage, Transform, Vec3, With,
     },
-    sprite::{Sprite, SpriteBundle},
+    sprite::SpriteBundle,
 };
 
 use crate::{
