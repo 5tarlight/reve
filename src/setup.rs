@@ -8,7 +8,7 @@ use bevy::{
 
 use crate::{
     champion::{Champion, Champions, MyPlayer},
-    constants::{GameInfo, Team, Textures, GAREN, MAP},
+    constants::{GameInfo, Team, Textures, CIRCLE, GAREN, MAP},
 };
 
 pub struct SetupPlugin;
@@ -53,6 +53,7 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     // Load assets
     let textures = Textures {
         map: asset.load(MAP),
+        cursor: asset.load(CIRCLE),
         garen: asset.load(GAREN),
     };
     commands.insert_resource(textures);
