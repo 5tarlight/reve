@@ -5,9 +5,13 @@ import { config } from "../lib/config";
 const Game = () => {
   const launch = async () => {
     const res = await axios.get(
-      `/api/launch?username=${localStorage.getItem(
-        "username"
-      )}&token=${1}&server=${config.server}&room=${1}`
+      "/api/launch" +
+        `?username=${localStorage.getItem("username")}` +
+        `&token=${1}` +
+        `&room=${1}` +
+        `&server=${config.server}` +
+        `&team=${"blue"}` +
+        `&champion=${"Garen"}`
     );
     console.log(res);
   };
