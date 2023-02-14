@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
-use reve::{input::InputPlugin, setup::SetupPlugin};
+use reve::{input::InputPlugin, movement::MovementPlugin, setup::SetupPlugin};
 
 fn main() {
     App::new()
@@ -16,5 +16,6 @@ fn main() {
         .add_plugin(WorldInspectorPlugin)
         .add_plugin(SetupPlugin)
         .add_plugin(InputPlugin)
+        .add_plugin(MovementPlugin)
         .run();
 }
