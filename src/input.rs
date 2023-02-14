@@ -10,7 +10,10 @@ use bevy::{
 
 use crate::{
     champion::{Champion, MyPlayer},
-    constants::{Textures, CURSOR_DURATION, MAX_MAP_X, MAX_MAP_Y, MIN_MAP_X, MIN_MAP_Y},
+    constants::{
+        Textures, CAM_GAP, CAM_KEY_SPEED, CAM_SPEED, CURSOR_DURATION, MAX_MAP_X, MAX_MAP_Y,
+        MIN_MAP_X, MIN_MAP_Y,
+    },
     movement::MoveToPoint,
 };
 
@@ -21,26 +24,36 @@ impl Plugin for InputPlugin {
         app.add_system(move_map)
             .add_system(move_mouse)
             .add_system(cursor_spawn)
-            .add_system(cursor_despawn);
+            .add_system(cursor_despawn)
+            .add_system(explore_map_with_cursor);
         // .add_system(grab_cursor);
     }
 }
 
-fn move_map(key: Res<Input<KeyCode>>, mut cam_query: Query<&mut Transform, With<Camera2d>>) {
+fn move_map(
+    key: Res<Input<KeyCode>>,
+    mut cam_query: Query<&mut Transform, With<Camera2d>>,
+    time: Res<Time>,
+    windows: Res<Windows>,
+) {
     // TODO : Movement speed multiplier
+    let window = windows.get_primary().unwrap();
+    let w = window.width();
+    let h = window.height();
 
+    let d = time.delta().as_secs_f32();
     if key.pressed(KeyCode::Left) {
         let mut cam = cam_query.get_single_mut().unwrap();
-        cam.translation.x = MIN_MAP_X.max(cam.translation.x - 20.);
+        cam.translation.x = (MIN_MAP_X + w / 2.).max(cam.translation.x - CAM_KEY_SPEED * d);
     } else if key.pressed(KeyCode::Right) {
         let mut cam = cam_query.get_single_mut().unwrap();
-        cam.translation.x = MAX_MAP_X.min(cam.translation.x + 20.);
+        cam.translation.x = (MAX_MAP_X - w / 2.).min(cam.translation.x + CAM_KEY_SPEED * d);
     } else if key.pressed(KeyCode::Up) {
         let mut cam = cam_query.get_single_mut().unwrap();
-        cam.translation.y = MAX_MAP_Y.min(cam.translation.y + 20.);
+        cam.translation.y = (MAX_MAP_Y - h / 2.).min(cam.translation.y + CAM_KEY_SPEED * d);
     } else if key.pressed(KeyCode::Down) {
         let mut cam = cam_query.get_single_mut().unwrap();
-        cam.translation.y = MIN_MAP_Y.max(cam.translation.y - 20.);
+        cam.translation.y = (MIN_MAP_Y + h / 2.).max(cam.translation.y - CAM_KEY_SPEED * d);
     }
 }
 
@@ -151,6 +164,63 @@ fn cursor_despawn(
         timer.0.tick(time.delta());
         if timer.0.finished() {
             commands.entity(entity).despawn();
+        }
+    }
+}
+
+fn explore_map_with_cursor(
+    windows: Res<Windows>,
+    mut cam_query: Query<&mut Transform, With<Camera2d>>,
+    time: Res<Time>,
+) {
+    let window = windows.get_primary().unwrap();
+    if let Some(pos) = window.cursor_position() {
+        let w = window.width();
+        let h = window.height();
+        let d = time.delta().as_secs_f32();
+        let mut ctf = cam_query.get_single_mut().unwrap();
+
+        let top = h - pos.y < CAM_GAP;
+        let bot = pos.y < CAM_GAP;
+        let left = pos.x < CAM_GAP;
+        let right = w - pos.x < CAM_GAP;
+
+        if top {
+            if left {
+                let x = ctf.translation.x - CAM_SPEED * d;
+                let y = ctf.translation.y + CAM_SPEED * d;
+                ctf.translation.x = x.max(MIN_MAP_X + w / 2.);
+                ctf.translation.y = y.min(MAX_MAP_Y - h / 2.);
+            } else if right {
+                let x = ctf.translation.x + CAM_SPEED * d;
+                let y = ctf.translation.y + CAM_SPEED * d;
+                ctf.translation.x = x.min(MAX_MAP_X - w / 2.);
+                ctf.translation.y = y.min(MAX_MAP_Y - h / 2.);
+            } else {
+                let y = ctf.translation.y + CAM_SPEED * d;
+                ctf.translation.y = y.min(MAX_MAP_Y - h / 2.);
+            }
+        } else if bot {
+            if left {
+                let x = ctf.translation.x - CAM_SPEED * d;
+                let y = ctf.translation.y - CAM_SPEED * d;
+                ctf.translation.x = x.max(MIN_MAP_X + w / 2.);
+                ctf.translation.y = y.max(MIN_MAP_Y + h / 2.);
+            } else if right {
+                let x = ctf.translation.x + CAM_SPEED * d;
+                let y = ctf.translation.y - CAM_SPEED * d;
+                ctf.translation.x = x.min(MAX_MAP_X - w / 2.);
+                ctf.translation.y = y.max(MIN_MAP_Y + h / 2.);
+            } else {
+                let y = ctf.translation.y - CAM_SPEED * d;
+                ctf.translation.y = y.max(MIN_MAP_Y + h / 2.);
+            }
+        } else if right {
+            let x = ctf.translation.x + CAM_SPEED * d;
+            ctf.translation.x = x.min(MAX_MAP_X - w / 2.);
+        } else if left {
+            let x = ctf.translation.x - CAM_SPEED * d;
+            ctf.translation.x = x.max(MIN_MAP_X + w / 2.);
         }
     }
 }
