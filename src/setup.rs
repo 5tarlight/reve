@@ -7,8 +7,9 @@ use bevy::{
 };
 
 use crate::{
-    champion::{Champion, Champions},
-    constants::{GameInfo, Team, Textures, GAREN, MAP},
+    champion::{Champion, Champions, MyPlayer},
+    constants::{GameInfo, Team, Textures, CIRCLE, GAREN, MAP},
+    movement::Velocity,
 };
 
 pub struct SetupPlugin;
@@ -53,6 +54,7 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     // Load assets
     let textures = Textures {
         map: asset.load(MAP),
+        cursor: asset.load(CIRCLE),
         garen: asset.load(GAREN),
     };
     commands.insert_resource(textures);
@@ -121,6 +123,7 @@ fn init_game(
         }
     }
 
+    let ms = champ.move_speed;
     commands
         .spawn(SpriteBundle {
             texture: img,
@@ -131,5 +134,7 @@ fn init_game(
             },
             ..Default::default()
         })
-        .insert(champ);
+        .insert(champ)
+        .insert(MyPlayer)
+        .insert(Velocity(ms));
 }
