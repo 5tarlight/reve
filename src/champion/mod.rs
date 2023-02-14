@@ -8,7 +8,6 @@ pub enum Champions {
     Garen,
 }
 
-#[allow(dead_code)]
 #[derive(Component)]
 pub struct Champion {
     pub team: Team,
@@ -43,3 +42,6 @@ pub struct Champion {
     /// Movement Speed
     pub move_speed: f32,
 }
+
+#[derive(Component)]
+pub struct MyPlayer;

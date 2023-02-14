@@ -9,11 +9,14 @@ pub const MAX_MAP_Y: f32 = 4580.0;
 
 pub const LOGO: &str = "REVE";
 pub const MAP: &str = "img/map.png";
+pub const CIRCLE: &str = "img/circle.png";
+pub const CURSOR_DURATION: f32 = 0.2;
 pub const GAREN: &str = "img/champ/Garen.png";
 
 #[derive(Resource)]
 pub struct Textures {
     pub map: Handle<Image>,
+    pub cursor: Handle<Image>,
     pub garen: Handle<Image>,
 }
 
