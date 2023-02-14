@@ -165,8 +165,8 @@ fn explore_map_with_cursor(
 ) {
     let window = windows.get_primary().unwrap();
     if let Some(pos) = window.cursor_position() {
-        let w = window.requested_width();
-        let h = window.requested_height();
+        let w = window.width();
+        let h = window.height();
         let d = time.delta().as_secs_f32();
         let mut ctf = cam_query.get_single_mut().unwrap();
 
@@ -177,28 +177,40 @@ fn explore_map_with_cursor(
 
         if top {
             if left {
-                ctf.translation.x -= CAM_SPEED * d;
-                ctf.translation.y += CAM_SPEED * d;
+                let x = ctf.translation.x - CAM_SPEED * d;
+                let y = ctf.translation.y + CAM_SPEED * d;
+                ctf.translation.x = x.max(MIN_MAP_X + w / 2.);
+                ctf.translation.y = y.min(MAX_MAP_Y - h / 2.);
             } else if right {
-                ctf.translation.x += CAM_SPEED * d;
-                ctf.translation.y += CAM_SPEED * d;
+                let x = ctf.translation.x + CAM_SPEED * d;
+                let y = ctf.translation.y + CAM_SPEED * d;
+                ctf.translation.x = x.min(MAX_MAP_X - w / 2.);
+                ctf.translation.y = y.min(MAX_MAP_Y - h / 2.);
             } else {
-                ctf.translation.y += CAM_SPEED * d;
+                let y = ctf.translation.y + CAM_SPEED * d;
+                ctf.translation.y = y.min(MAX_MAP_Y - h / 2.);
             }
         } else if bot {
             if left {
-                ctf.translation.x -= CAM_SPEED * d;
-                ctf.translation.y -= CAM_SPEED * d;
+                let x = ctf.translation.x - CAM_SPEED * d;
+                let y = ctf.translation.y - CAM_SPEED * d;
+                ctf.translation.x = x.max(MIN_MAP_X + w / 2.);
+                ctf.translation.y = y.max(MIN_MAP_Y + h / 2.);
             } else if right {
-                ctf.translation.x += CAM_SPEED * d;
-                ctf.translation.y -= CAM_SPEED * d;
+                let x = ctf.translation.x + CAM_SPEED * d;
+                let y = ctf.translation.y - CAM_SPEED * d;
+                ctf.translation.x = x.min(MAX_MAP_X - w / 2.);
+                ctf.translation.y = y.max(MIN_MAP_Y + h / 2.);
             } else {
-                ctf.translation.y -= CAM_SPEED * d;
+                let y = ctf.translation.y - CAM_SPEED * d;
+                ctf.translation.y = y.max(MIN_MAP_Y + h / 2.);
             }
         } else if right {
-            ctf.translation.x += CAM_SPEED * d;
+            let x = ctf.translation.x + CAM_SPEED * d;
+            ctf.translation.x = x.min(MAX_MAP_X - w / 2.);
         } else if left {
-            ctf.translation.x -= CAM_SPEED * d;
+            let x = ctf.translation.x - CAM_SPEED * d;
+            ctf.translation.x = x.max(MIN_MAP_X + w / 2.);
         }
     }
 }

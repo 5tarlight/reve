@@ -2,10 +2,10 @@ use bevy::prelude::{Handle, Image, Resource};
 
 use crate::champion::Champions;
 
-pub const MIN_MAP_X: f32 = -5140.0;
-pub const MIN_MAP_Y: f32 = -4580.0;
-pub const MAX_MAP_X: f32 = 5140.0;
-pub const MAX_MAP_Y: f32 = 4580.0;
+pub const MIN_MAP_X: f32 = -6100.0;
+pub const MIN_MAP_Y: f32 = -5120.0;
+pub const MAX_MAP_X: f32 = 6100.0;
+pub const MAX_MAP_Y: f32 = 5120.0;
 pub const CAM_SPEED: f32 = 1500.0;
 pub const CAM_GAP: f32 = 100.0;
 
