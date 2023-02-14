@@ -10,7 +10,9 @@ use bevy::{
 
 use crate::{
     champion::{Champion, MyPlayer},
-    constants::{Textures, CURSOR_DURATION, MAX_MAP_X, MAX_MAP_Y, MIN_MAP_X, MIN_MAP_Y},
+    constants::{
+        Textures, CAM_GAP, CAM_SPEED, CURSOR_DURATION, MAX_MAP_X, MAX_MAP_Y, MIN_MAP_X, MIN_MAP_Y,
+    },
     movement::MoveToPoint,
 };
 
@@ -21,7 +23,8 @@ impl Plugin for InputPlugin {
         app.add_system(move_map)
             .add_system(move_mouse)
             .add_system(cursor_spawn)
-            .add_system(cursor_despawn);
+            .add_system(cursor_despawn)
+            .add_system(explore_map_with_cursor);
         // .add_system(grab_cursor);
     }
 }
@@ -151,6 +154,51 @@ fn cursor_despawn(
         timer.0.tick(time.delta());
         if timer.0.finished() {
             commands.entity(entity).despawn();
+        }
+    }
+}
+
+fn explore_map_with_cursor(
+    windows: Res<Windows>,
+    mut cam_query: Query<&mut Transform, With<Camera2d>>,
+    time: Res<Time>,
+) {
+    let window = windows.get_primary().unwrap();
+    if let Some(pos) = window.cursor_position() {
+        let w = window.requested_width();
+        let h = window.requested_height();
+        let d = time.delta().as_secs_f32();
+        let mut ctf = cam_query.get_single_mut().unwrap();
+
+        let top = h - pos.y < CAM_GAP;
+        let bot = pos.y < CAM_GAP;
+        let left = pos.x < CAM_GAP;
+        let right = w - pos.x < CAM_GAP;
+
+        if top {
+            if left {
+                ctf.translation.x -= CAM_SPEED * d;
+                ctf.translation.y += CAM_SPEED * d;
+            } else if right {
+                ctf.translation.x += CAM_SPEED * d;
+                ctf.translation.y += CAM_SPEED * d;
+            } else {
+                ctf.translation.y += CAM_SPEED * d;
+            }
+        } else if bot {
+            if left {
+                ctf.translation.x -= CAM_SPEED * d;
+                ctf.translation.y -= CAM_SPEED * d;
+            } else if right {
+                ctf.translation.x += CAM_SPEED * d;
+                ctf.translation.y -= CAM_SPEED * d;
+            } else {
+                ctf.translation.y -= CAM_SPEED * d;
+            }
+        } else if right {
+            ctf.translation.x += CAM_SPEED * d;
+        } else if left {
+            ctf.translation.x -= CAM_SPEED * d;
         }
     }
 }
