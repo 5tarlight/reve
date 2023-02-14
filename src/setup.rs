@@ -9,6 +9,7 @@ use bevy::{
 use crate::{
     champion::{Champion, Champions, MyPlayer},
     constants::{GameInfo, Team, Textures, CIRCLE, GAREN, MAP},
+    movement::Velocity,
 };
 
 pub struct SetupPlugin;
@@ -122,6 +123,7 @@ fn init_game(
         }
     }
 
+    let ms = champ.move_speed;
     commands
         .spawn(SpriteBundle {
             texture: img,
@@ -133,5 +135,6 @@ fn init_game(
             ..Default::default()
         })
         .insert(champ)
-        .insert(MyPlayer);
+        .insert(MyPlayer)
+        .insert(Velocity(ms));
 }

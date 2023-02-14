@@ -1,7 +1,7 @@
 use bevy::{
     prelude::{
         Camera2d, Commands, Component, Entity, Input, KeyCode, MouseButton, Plugin, Query, Res,
-        Transform, Vec3, With,
+        Transform, Vec2, Vec3, With,
     },
     sprite::SpriteBundle,
     time::{Time, Timer, TimerMode},
@@ -11,6 +11,7 @@ use bevy::{
 use crate::{
     champion::{Champion, MyPlayer},
     constants::{Textures, CURSOR_DURATION, MAX_MAP_X, MAX_MAP_Y, MIN_MAP_X, MIN_MAP_Y},
+    movement::MoveToPoint,
 };
 
 pub struct InputPlugin;
@@ -84,11 +85,11 @@ fn move_mouse(
     mut commands: Commands,
     buttons: Res<Input<MouseButton>>,
     windows: Res<Windows>,
-    mut player_query: Query<&Transform, (With<MyPlayer>, With<Champion>)>,
+    mut player_query: Query<(Entity, &Transform), (With<MyPlayer>, With<Champion>)>,
     camera_query: Query<&Transform, With<Camera2d>>,
 ) {
     if buttons.pressed(MouseButton::Right) {
-        let ptf = player_query.get_single_mut().unwrap();
+        let (entity, ptf) = player_query.get_single_mut().unwrap();
         let ctf = camera_query.get_single().unwrap();
         let win = windows.get_primary().unwrap();
         let win_w = win.requested_width();
@@ -111,6 +112,10 @@ fn move_mouse(
             if buttons.just_pressed(MouseButton::Right) {
                 commands.spawn(CursorEffectSpawn(Vec3::new(target_w, target_h, 100.)));
             }
+
+            commands
+                .entity(entity)
+                .insert(MoveToPoint(Vec2::new(target_w, target_h)));
         }
     }
 }

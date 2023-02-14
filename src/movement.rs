@@ -12,13 +12,13 @@ impl Plugin for MovementPlugin {
 }
 
 #[derive(Component)]
-pub struct Velocity(f32);
+pub struct Velocity(pub f32);
 
 #[derive(Component)]
-pub struct MoveToPoint(Vec2);
+pub struct MoveToPoint(pub Vec2);
 
 #[derive(Component)]
-pub struct MoveToPosition(f32);
+pub struct MoveToPosition(pub f32);
 
 fn move_to_point(
     mut commands: Commands,
