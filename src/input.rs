@@ -11,7 +11,8 @@ use bevy::{
 use crate::{
     champion::{Champion, MyPlayer},
     constants::{
-        Textures, CAM_GAP, CAM_SPEED, CURSOR_DURATION, MAX_MAP_X, MAX_MAP_Y, MIN_MAP_X, MIN_MAP_Y,
+        Textures, CAM_GAP, CAM_KEY_SPEED, CAM_SPEED, CURSOR_DURATION, MAX_MAP_X, MAX_MAP_Y,
+        MIN_MAP_X, MIN_MAP_Y,
     },
     movement::MoveToPoint,
 };
@@ -29,21 +30,30 @@ impl Plugin for InputPlugin {
     }
 }
 
-fn move_map(key: Res<Input<KeyCode>>, mut cam_query: Query<&mut Transform, With<Camera2d>>) {
+fn move_map(
+    key: Res<Input<KeyCode>>,
+    mut cam_query: Query<&mut Transform, With<Camera2d>>,
+    time: Res<Time>,
+    windows: Res<Windows>,
+) {
     // TODO : Movement speed multiplier
+    let window = windows.get_primary().unwrap();
+    let w = window.width();
+    let h = window.height();
 
+    let d = time.delta().as_secs_f32();
     if key.pressed(KeyCode::Left) {
         let mut cam = cam_query.get_single_mut().unwrap();
-        cam.translation.x = MIN_MAP_X.max(cam.translation.x - 20.);
+        cam.translation.x = (MIN_MAP_X + w / 2.).max(cam.translation.x - CAM_KEY_SPEED * d);
     } else if key.pressed(KeyCode::Right) {
         let mut cam = cam_query.get_single_mut().unwrap();
-        cam.translation.x = MAX_MAP_X.min(cam.translation.x + 20.);
+        cam.translation.x = (MAX_MAP_X - w / 2.).min(cam.translation.x + CAM_KEY_SPEED * d);
     } else if key.pressed(KeyCode::Up) {
         let mut cam = cam_query.get_single_mut().unwrap();
-        cam.translation.y = MAX_MAP_Y.min(cam.translation.y + 20.);
+        cam.translation.y = (MAX_MAP_Y - h / 2.).min(cam.translation.y + CAM_KEY_SPEED * d);
     } else if key.pressed(KeyCode::Down) {
         let mut cam = cam_query.get_single_mut().unwrap();
-        cam.translation.y = MIN_MAP_Y.max(cam.translation.y - 20.);
+        cam.translation.y = (MIN_MAP_Y + h / 2.).max(cam.translation.y - CAM_KEY_SPEED * d);
     }
 }
 
