@@ -106,8 +106,8 @@ fn move_mouse(
         let (entity, ptf) = player_query.get_single_mut().unwrap();
         let ctf = camera_query.get_single().unwrap();
         let win = windows.get_primary().unwrap();
-        let win_w = win.requested_width();
-        let win_h = win.requested_height();
+        let win_w = win.width();
+        let win_h = win.height();
 
         // TODO : Right Click means not only move but attack.
         if let Some(pos) = win.cursor_position() {
