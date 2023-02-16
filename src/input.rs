@@ -1,7 +1,7 @@
 use bevy::{
     prelude::{
         Camera2d, Commands, Component, Entity, Input, KeyCode, MouseButton, Plugin, Query, Res,
-        Transform, Vec2, Vec3, With,
+        Transform, Vec2, Vec3, With, Without,
     },
     sprite::SpriteBundle,
     time::{Time, Timer, TimerMode},
@@ -25,7 +25,8 @@ impl Plugin for InputPlugin {
             .add_system(move_mouse)
             .add_system(cursor_spawn)
             .add_system(cursor_despawn)
-            .add_system(explore_map_with_cursor);
+            .add_system(explore_map_with_cursor)
+            .add_system(space_to_center);
         // .add_system(grab_cursor);
     }
 }
@@ -222,5 +223,19 @@ fn explore_map_with_cursor(
             let x = ctf.translation.x - CAM_SPEED * d;
             ctf.translation.x = x.max(MIN_MAP_X + w / 2.);
         }
+    }
+}
+
+fn space_to_center(
+    key: Res<Input<KeyCode>>,
+    player_query: Query<&Transform, (With<MyPlayer>, With<Champion>, Without<Camera2d>)>,
+    mut cam_query: Query<&mut Transform, With<Camera2d>>,
+) {
+    if key.pressed(KeyCode::Space) {
+        let ptf = player_query.get_single().unwrap();
+        let mut ctf = cam_query.get_single_mut().unwrap();
+
+        ctf.translation.x = ptf.translation.x;
+        ctf.translation.y = ptf.translation.y;
     }
 }
