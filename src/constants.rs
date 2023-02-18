@@ -81,7 +81,7 @@ pub enum Team {
     Blue,
 }
 
-#[derive(Resource)]
+#[derive(Resource, Clone, Copy)]
 pub enum Spell {
     BARRIER,
     CLARITY,
