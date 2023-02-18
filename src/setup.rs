@@ -9,9 +9,9 @@ use bevy::{
 use crate::{
     champion::{Champion, Champions, MyPlayer},
     constants::{
-        GameInfo, GarenTexture, SpellTexture, Team, Textures, BARRIER, CIRCLE, CLARITY, CLEANSE,
-        EXHAUST, FLASH, GAREN, GAREN_E, GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R, GAREN_W, GHOST,
-        HEAL, IGNITE, MAP, MARK, SMITE, TELEPORT,
+        GameInfo, GarenTexture, Spell, SpellTexture, Team, Textures, BARRIER, CIRCLE, CLARITY,
+        CLEANSE, EXHAUST, FLASH, GAREN, GAREN_E, GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R,
+        GAREN_W, GHOST, HEAL, IGNITE, MAP, MARK, SMITE, TELEPORT,
     },
     movement::Velocity,
 };
@@ -38,11 +38,33 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let room = args[4].clone();
     let team = args[5].clone();
     let champion = args[6].clone();
+    let spell_d = args[7].clone();
+    let spell_f = args[8].clone();
 
     let champion = match champion.as_str() {
         "Garen" => Champions::Garen,
         _ => Champions::Garen,
     };
+
+    fn parse_spell(spell: &String) -> Spell {
+        match spell.as_str() {
+            "barrier" => Spell::BARRIER,
+            "clarity" => Spell::CLARITY,
+            "cleanse" => Spell::CLEANSE,
+            "exhaust" => Spell::EXHAUST,
+            "flash" => Spell::FLASH,
+            "ghost" => Spell::GHOST,
+            "heal" => Spell::HEAL,
+            "ignite" => Spell::IGNITE,
+            "mark" => Spell::MARK,
+            "smite" => Spell::SMITE,
+            "teleport" => Spell::TELEPORT,
+            _ => Spell::FLASH,
+        }
+    }
+
+    let spell_d = parse_spell(&spell_d);
+    let spell_f = parse_spell(&spell_f);
 
     let game_info = GameInfo {
         username,
@@ -51,6 +73,8 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
         room,
         team: team.eq("red").then(|| Team::Red).unwrap_or(Team::Blue),
         champion,
+        spell_d,
+        spell_f,
     };
 
     commands.insert_resource(game_info);

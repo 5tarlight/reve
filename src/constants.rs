@@ -82,6 +82,21 @@ pub enum Team {
 }
 
 #[derive(Resource)]
+pub enum Spell {
+    BARRIER,
+    CLARITY,
+    CLEANSE,
+    EXHAUST,
+    FLASH,
+    GHOST,
+    HEAL,
+    IGNITE,
+    MARK,
+    SMITE,
+    TELEPORT,
+}
+
+#[derive(Resource)]
 pub struct GameInfo {
     pub username: String,
     pub token: String,
@@ -89,4 +104,6 @@ pub struct GameInfo {
     pub room: String,
     pub team: Team,
     pub champion: Champions,
+    pub spell_d: Spell,
+    pub spell_f: Spell,
 }
