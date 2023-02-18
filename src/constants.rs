@@ -15,12 +15,18 @@ pub const MAP: &str = "img/map.png";
 pub const CIRCLE: &str = "img/circle.png";
 pub const CURSOR_DURATION: f32 = 0.2;
 
+pub const SKILL_UI_W: f32 = 800.;
+pub const SKILL_UI_H: f32 = 320.;
+
+pub const PASSIVE_ICON_SIZE: f32 = 48.;
+pub const SKILL_ICON_SIZE: f32 = 64.;
+
 pub const GAREN: &str = "img/champ/Garen.png";
 pub const GAREN_P: &str = "img/skill/garen/p.png";
 pub const GAREN_Q: &str = "img/skill/garen/q.png";
 pub const GAREN_W: &str = "img/skill/garen/w.png";
 pub const GAREN_E: &str = "img/skill/garen/e.png";
-pub const GAREN_E_CANCEL: &str = "img/skill/garen/p_cancel.png";
+pub const GAREN_E_CANCEL: &str = "img/skill/garen/e_cancel.png";
 pub const GAREN_R: &str = "img/skill/garen/r.png";
 
 #[derive(Resource)]
@@ -33,12 +39,11 @@ pub struct Textures {
 #[derive(Resource, Clone)]
 pub struct GarenTexture {
     pub portrait: Handle<Image>,
-    pub p: Handle<Image>,
-    pub q: Handle<Image>,
-    pub w: Handle<Image>,
-    pub e: Handle<Image>,
-    pub e_cancel: Handle<Image>,
-    pub r: Handle<Image>,
+    pub p: Vec<Handle<Image>>,
+    pub q: Vec<Handle<Image>>,
+    pub w: Vec<Handle<Image>>,
+    pub e: Vec<Handle<Image>>,
+    pub r: Vec<Handle<Image>>,
 }
 
 #[derive(Clone, Copy)]

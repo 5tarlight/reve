@@ -116,9 +116,9 @@ fn move_mouse(
             let target_w = ctf.translation.x + gap_w;
             let target_h = ctf.translation.y + gap_h;
 
-            println!("Target : {}x{}", target_w, target_h);
+            println!("Target : ({}, {})", target_w, target_h);
             println!(
-                "Distance : {}x{}",
+                "Distance : ({}, {})",
                 target_w - ptf.translation.x,
                 target_h - ptf.translation.y
             );

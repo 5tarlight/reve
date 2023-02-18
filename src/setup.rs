@@ -60,12 +60,11 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
         cursor: asset.load(CIRCLE),
         garen: GarenTexture {
             portrait: asset.load(GAREN),
-            p: asset.load(GAREN_P),
-            q: asset.load(GAREN_Q),
-            w: asset.load(GAREN_W),
-            e: asset.load(GAREN_E),
-            e_cancel: asset.load(GAREN_E_CANCEL),
-            r: asset.load(GAREN_R),
+            p: vec![asset.load(GAREN_P)],
+            q: vec![asset.load(GAREN_Q)],
+            w: vec![asset.load(GAREN_W)],
+            e: vec![asset.load(GAREN_E), asset.load(GAREN_E_CANCEL)],
+            r: vec![asset.load(GAREN_R)],
         },
     };
     commands.insert_resource(textures);
