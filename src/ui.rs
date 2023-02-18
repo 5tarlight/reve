@@ -1,7 +1,7 @@
 use bevy::{
     prelude::{
-        BuildChildren, ButtonBundle, Color, Commands, Component, NodeBundle, Plugin, Res,
-        StartupStage,
+        BuildChildren, ButtonBundle, Color, Commands, Component, Handle, Image, NodeBundle, Plugin,
+        Res, StartupStage,
     },
     ui::{AlignSelf, BackgroundColor, JustifyContent, Size, Style, UiRect, Val},
     window::Windows,
@@ -9,8 +9,11 @@ use bevy::{
 
 use crate::{
     champion::Champions,
-    constants::{GameInfo, Textures, PASSIVE_ICON_SIZE, SKILL_ICON_SIZE, SKILL_UI_H, SKILL_UI_W},
-    skill::{SkillE, SkillP, SkillQ, SkillR, SkillW},
+    constants::{
+        GameInfo, Spell, Textures, PASSIVE_ICON_SIZE, SKILL_ICON_SIZE, SKILL_UI_H, SKILL_UI_W,
+        SPELL_ICON_SIZE,
+    },
+    skill::{SkillE, SkillP, SkillQ, SkillR, SkillW, SpellD, SpellF},
 };
 
 pub struct ReveUiPlugin;
@@ -167,6 +170,63 @@ fn init_ui(
                             ..Default::default()
                         })
                         .insert(SkillR);
+
+                    fn get_spell_img(spell: Spell, textures: &Res<Textures>) -> Handle<Image> {
+                        match spell {
+                            Spell::BARRIER => textures.spell.barrier.clone(),
+                            Spell::CLARITY => textures.spell.clarity.clone(),
+                            Spell::CLEANSE => textures.spell.cleanse.clone(),
+                            Spell::EXHAUST => textures.spell.exhaust.clone(),
+                            Spell::FLASH => textures.spell.flash.clone(),
+                            Spell::GHOST => textures.spell.ghost.clone(),
+                            Spell::HEAL => textures.spell.heal.clone(),
+                            Spell::IGNITE => textures.spell.ignite.clone(),
+                            Spell::MARK => textures.spell.mark.clone(),
+                            Spell::SMITE => textures.spell.smite.clone(),
+                            Spell::TELEPORT => textures.spell.teleport.clone(),
+                        }
+                    }
+
+                    let icon_d = get_spell_img(game_info.spell_d, &textures);
+                    let icon_f = get_spell_img(game_info.spell_f, &textures);
+
+                    // D
+                    commands
+                        .spawn(ButtonBundle {
+                            style: Style {
+                                size: Size::new(Val::Px(SPELL_ICON_SIZE), Val::Px(SPELL_ICON_SIZE)),
+                                align_self: AlignSelf::FlexEnd,
+                                margin: UiRect {
+                                    left: Val::Px(15.),
+                                    right: Val::Px(5.),
+                                    top: Val::Px(20.),
+                                    bottom: Val::Px(60.),
+                                },
+                                ..Default::default()
+                            },
+                            image: icon_d.into(),
+                            ..Default::default()
+                        })
+                        .insert(SpellD);
+
+                    // F
+                    commands
+                        .spawn(ButtonBundle {
+                            style: Style {
+                                size: Size::new(Val::Px(SPELL_ICON_SIZE), Val::Px(SPELL_ICON_SIZE)),
+                                align_self: AlignSelf::FlexEnd,
+                                margin: UiRect {
+                                    left: Val::Px(5.),
+                                    right: Val::Px(5.),
+                                    top: Val::Px(20.),
+                                    bottom: Val::Px(60.),
+                                },
+                                ..Default::default()
+                            },
+                            image: icon_f.into(),
+                            ..Default::default()
+                        })
+                        .insert(SpellF);
                 });
         });
 }

@@ -14,3 +14,9 @@ pub struct SkillE;
 
 #[derive(Component)]
 pub struct SkillR;
+
+#[derive(Component)]
+pub struct SpellD;
+
+#[derive(Component)]
+pub struct SpellF;
