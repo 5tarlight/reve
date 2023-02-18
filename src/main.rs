@@ -1,12 +1,12 @@
 use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
-use reve::{input::InputPlugin, movement::MovementPlugin, setup::SetupPlugin};
+use reve::{input::InputPlugin, movement::MovementPlugin, setup::SetupPlugin, ui::ReveUiPlugin};
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             window: WindowDescriptor {
-                title: "REVE Online".to_string(),
+                title: "Reve Of Legends".to_string(),
                 width: 1920.0,
                 height: 1080.0,
                 ..Default::default()
@@ -17,5 +17,6 @@ fn main() {
         .add_plugin(SetupPlugin)
         .add_plugin(InputPlugin)
         .add_plugin(MovementPlugin)
+        .add_plugin(ReveUiPlugin)
         .run();
 }
