@@ -15,8 +15,8 @@ pub const MAP: &str = "img/map.png";
 pub const CIRCLE: &str = "img/circle.png";
 pub const CURSOR_DURATION: f32 = 0.2;
 
-pub const SKILL_UI_W: f32 = 800.;
-pub const SKILL_UI_H: f32 = 320.;
+pub const SKILL_UI_W: f32 = 400.;
+pub const SKILL_UI_H: f32 = 160.;
 
 pub const PASSIVE_ICON_SIZE: f32 = 32.;
 pub const SKILL_ICON_SIZE: f32 = 48.;
