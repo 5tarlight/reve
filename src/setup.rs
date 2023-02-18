@@ -8,7 +8,10 @@ use bevy::{
 
 use crate::{
     champion::{Champion, Champions, MyPlayer},
-    constants::{GameInfo, Team, Textures, CIRCLE, GAREN, MAP},
+    constants::{
+        GameInfo, GarenTexture, Team, Textures, CIRCLE, GAREN, GAREN_E, GAREN_E_CANCEL, GAREN_P,
+        GAREN_Q, GAREN_R, GAREN_W, MAP,
+    },
     movement::Velocity,
 };
 
@@ -55,7 +58,15 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let textures = Textures {
         map: asset.load(MAP),
         cursor: asset.load(CIRCLE),
-        garen: asset.load(GAREN),
+        garen: GarenTexture {
+            portrait: asset.load(GAREN),
+            p: asset.load(GAREN_P),
+            q: asset.load(GAREN_Q),
+            w: asset.load(GAREN_W),
+            e: asset.load(GAREN_E),
+            e_cancel: asset.load(GAREN_E_CANCEL),
+            r: asset.load(GAREN_R),
+        },
     };
     commands.insert_resource(textures);
 }
@@ -119,7 +130,7 @@ fn init_game(
                 name: Champions::Garen,
                 team: game_info.team.clone(),
             };
-            img = textures.garen.clone();
+            img = textures.garen.portrait.clone();
         }
     }
 
