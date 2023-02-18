@@ -47,8 +47,8 @@ fn init_ui(mut commands: Commands, textures: Res<Textures>, game_info: Res<GameI
                         size: Size::new(Val::Px(PASSIVE_ICON_SIZE), Val::Px(PASSIVE_ICON_SIZE)),
                         align_self: AlignSelf::FlexEnd,
                         margin: UiRect {
-                            left: Val::Px(20.),
-                            right: Val::Px(30.),
+                            left: Val::Px(5.),
+                            right: Val::Px(10.),
                             top: Val::Px(20.),
                             bottom: Val::Px(60.),
                         },

@@ -18,8 +18,8 @@ pub const CURSOR_DURATION: f32 = 0.2;
 pub const SKILL_UI_W: f32 = 800.;
 pub const SKILL_UI_H: f32 = 320.;
 
-pub const PASSIVE_ICON_SIZE: f32 = 48.;
-pub const SKILL_ICON_SIZE: f32 = 64.;
+pub const PASSIVE_ICON_SIZE: f32 = 32.;
+pub const SKILL_ICON_SIZE: f32 = 48.;
 
 pub const GAREN: &str = "img/champ/Garen.png";
 pub const GAREN_P: &str = "img/skill/garen/p.png";
