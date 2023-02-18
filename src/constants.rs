@@ -20,6 +20,19 @@ pub const SKILL_UI_H: f32 = 160.;
 
 pub const PASSIVE_ICON_SIZE: f32 = 32.;
 pub const SKILL_ICON_SIZE: f32 = 48.;
+pub const SPELL_ICON_SIZE: f32 = 40.;
+
+pub const BARRIER: &str = "img/skill/spell/barrier.png";
+pub const CLARITY: &str = "img/skill/spell/clarity.png";
+pub const CLEANSE: &str = "img/skill/spell/cleanse.png";
+pub const EXHAUST: &str = "img/skill/spell/exhaust.png";
+pub const FLASH: &str = "img/skill/spell/flash.png";
+pub const GHOST: &str = "img/skill/spell/ghost.png";
+pub const HEAL: &str = "img/skill/spell/heal.png";
+pub const IGNITE: &str = "img/skill/spell/ignite.png";
+pub const MARK: &str = "img/skill/spell/mark.png";
+pub const SMITE: &str = "img/skill/spell/smite.png";
+pub const TELEPORT: &str = "img/skill/spell/teleport.png";
 
 pub const GAREN: &str = "img/champ/Garen.png";
 pub const GAREN_P: &str = "img/skill/garen/p.png";
@@ -33,7 +46,23 @@ pub const GAREN_R: &str = "img/skill/garen/r.png";
 pub struct Textures {
     pub map: Handle<Image>,
     pub cursor: Handle<Image>,
+    pub spell: SpellTexture,
     pub garen: GarenTexture,
+}
+
+#[derive(Resource)]
+pub struct SpellTexture {
+    pub barrier: Handle<Image>,
+    pub clarity: Handle<Image>,
+    pub cleanse: Handle<Image>,
+    pub exhaust: Handle<Image>,
+    pub flash: Handle<Image>,
+    pub ghost: Handle<Image>,
+    pub heal: Handle<Image>,
+    pub ignite: Handle<Image>,
+    pub mark: Handle<Image>,
+    pub smite: Handle<Image>,
+    pub teleport: Handle<Image>,
 }
 
 #[derive(Resource, Clone)]

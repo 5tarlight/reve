@@ -9,8 +9,9 @@ use bevy::{
 use crate::{
     champion::{Champion, Champions, MyPlayer},
     constants::{
-        GameInfo, GarenTexture, Team, Textures, CIRCLE, GAREN, GAREN_E, GAREN_E_CANCEL, GAREN_P,
-        GAREN_Q, GAREN_R, GAREN_W, MAP,
+        GameInfo, GarenTexture, SpellTexture, Team, Textures, BARRIER, CIRCLE, CLARITY, CLEANSE,
+        EXHAUST, FLASH, GAREN, GAREN_E, GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R, GAREN_W, GHOST,
+        HEAL, IGNITE, MAP, MARK, SMITE, TELEPORT,
     },
     movement::Velocity,
 };
@@ -58,6 +59,19 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let textures = Textures {
         map: asset.load(MAP),
         cursor: asset.load(CIRCLE),
+        spell: SpellTexture {
+            barrier: asset.load(BARRIER),
+            clarity: asset.load(CLARITY),
+            cleanse: asset.load(CLEANSE),
+            exhaust: asset.load(EXHAUST),
+            flash: asset.load(FLASH),
+            ghost: asset.load(GHOST),
+            heal: asset.load(HEAL),
+            ignite: asset.load(IGNITE),
+            mark: asset.load(MARK),
+            smite: asset.load(SMITE),
+            teleport: asset.load(TELEPORT),
+        },
         garen: GarenTexture {
             portrait: asset.load(GAREN),
             p: vec![asset.load(GAREN_P)],
