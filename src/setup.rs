@@ -152,69 +152,10 @@ fn init_game(
     let champ: Champion;
     let img: Handle<Image>;
 
+    champ = Champion::new(game_info.champion, game_info.team);
     match game_info.champion {
-        Champions::GAREN => {
-            champ = Champion {
-                max_hp: 690.,
-                hp: 690.,
-                grow_hp: 98.,
-                hp_gen: 8.,
-                grow_hp_gen: 0.5,
-                mp: 0.,
-                grow_mp: 0.,
-                grow_mp_gen: 0.,
-                max_mp: 0.,
-                mp_gen: 0.,
-                ad: 66.,
-                grow_ad: 4.5,
-                ap: 0.,
-                grow_ap: 0.,
-                attack_speed: 0.625,
-                grow_attack_speed: 3.65,
-                def_ad: 36.,
-                grow_def_ad: 4.2,
-                def_ap: 32.,
-                grow_def_ap: 1.55,
-                hit_range: 175.,
-                move_speed: 340.,
-                crit_prob: 0,
-                cooldown: 0.,
-                name: Champions::GAREN,
-                team: game_info.team.clone(),
-            };
-            img = textures.garen.portrait.clone();
-        }
-        Champions::ASH => {
-            champ = Champion {
-                hp: 640.,
-                max_hp: 640.,
-                grow_hp: 101.,
-                hp_gen: 3.5,
-                grow_hp_gen: 0.55,
-                mp: 280.,
-                max_mp: 280.,
-                grow_mp: 35.,
-                mp_gen: 6.97,
-                grow_mp_gen: 0.65,
-                ad: 59.,
-                grow_ad: 2.96,
-                ap: 0.,
-                grow_ap: 0.,
-                attack_speed: 0.658,
-                grow_attack_speed: 3.33,
-                def_ad: 26.,
-                grow_def_ad: 4.6,
-                def_ap: 30.,
-                grow_def_ap: 1.3,
-                hit_range: 600.,
-                move_speed: 325.,
-                cooldown: 0.,
-                crit_prob: 0,
-                name: Champions::ASH,
-                team: game_info.team.clone(),
-            };
-            img = textures.ash.portrait.clone();
-        }
+        Champions::GAREN => img = textures.garen.portrait.clone(),
+        Champions::ASH => img = textures.ash.portrait.clone(),
     }
 
     let ms = champ.move_speed;

@@ -104,7 +104,7 @@ pub enum Spell {
     TELEPORT,
 }
 
-#[derive(Resource)]
+#[derive(Resource, Clone)]
 pub struct GameInfo {
     pub username: String,
     pub token: String,
