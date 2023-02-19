@@ -5,7 +5,8 @@ use crate::constants::Team;
 pub mod class;
 
 pub enum Champions {
-    Garen,
+    GAREN,
+    ASH,
 }
 
 #[derive(Component)]

@@ -9,9 +9,10 @@ use bevy::{
 use crate::{
     champion::{Champion, Champions, MyPlayer},
     constants::{
-        GameInfo, GarenTexture, Spell, SpellTexture, Team, Textures, BARRIER, CIRCLE, CLARITY,
-        CLEANSE, EXHAUST, FLASH, GAREN, GAREN_E, GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R,
-        GAREN_W, GHOST, HEAL, IGNITE, MAP, MARK, SMITE, TELEPORT,
+        ChampionTexture, GameInfo, Spell, SpellTexture, Team, Textures, ASH, ASH_E, ASH_P, ASH_Q,
+        ASH_R, ASH_W, BARRIER, CIRCLE, CLARITY, CLEANSE, EXHAUST, FLASH, GAREN, GAREN_E,
+        GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R, GAREN_W, GHOST, HEAL, IGNITE, MAP, MARK, SMITE,
+        TELEPORT,
     },
     movement::Velocity,
 };
@@ -42,8 +43,9 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let spell_f = args[8].clone();
 
     let champion = match champion.as_str() {
-        "Garen" => Champions::Garen,
-        _ => Champions::Garen,
+        "Garen" => Champions::GAREN,
+        "Ash" => Champions::ASH,
+        _ => Champions::GAREN,
     };
 
     fn parse_spell(spell: &String) -> Spell {
@@ -96,13 +98,21 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
             smite: asset.load(SMITE),
             teleport: asset.load(TELEPORT),
         },
-        garen: GarenTexture {
+        garen: ChampionTexture {
             portrait: asset.load(GAREN),
             p: vec![asset.load(GAREN_P)],
             q: vec![asset.load(GAREN_Q)],
             w: vec![asset.load(GAREN_W)],
             e: vec![asset.load(GAREN_E), asset.load(GAREN_E_CANCEL)],
             r: vec![asset.load(GAREN_R)],
+        },
+        ash: ChampionTexture {
+            portrait: asset.load(ASH),
+            p: vec![asset.load(ASH_P)],
+            q: vec![asset.load(ASH_Q)],
+            w: vec![asset.load(ASH_W)],
+            e: vec![asset.load(ASH_E)],
+            r: vec![asset.load(ASH_R)],
         },
     };
     commands.insert_resource(textures);
@@ -143,7 +153,7 @@ fn init_game(
     let img: Handle<Image>;
 
     match game_info.champion {
-        Champions::Garen => {
+        Champions::GAREN => {
             champ = Champion {
                 max_hp: 690.,
                 hp: 690.,
@@ -164,7 +174,7 @@ fn init_game(
                 move_speed: 340.,
                 crit_prob: 0,
                 cooldown: 0.,
-                name: Champions::Garen,
+                name: Champions::GAREN,
                 team: game_info.team.clone(),
             };
             img = textures.garen.portrait.clone();

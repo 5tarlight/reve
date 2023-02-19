@@ -42,12 +42,20 @@ pub const GAREN_E: &str = "img/skill/garen/e.png";
 pub const GAREN_E_CANCEL: &str = "img/skill/garen/e_cancel.png";
 pub const GAREN_R: &str = "img/skill/garen/r.png";
 
+pub const ASH: &str = "img/champ/Ash.png";
+pub const ASH_P: &str = "img/skill/ash/p.png";
+pub const ASH_Q: &str = "img/skill/ash/q.png";
+pub const ASH_W: &str = "img/skill/ash/w.png";
+pub const ASH_E: &str = "img/skill/ash/e.png";
+pub const ASH_R: &str = "img/skill/ash/r.png";
+
 #[derive(Resource)]
 pub struct Textures {
     pub map: Handle<Image>,
     pub cursor: Handle<Image>,
     pub spell: SpellTexture,
-    pub garen: GarenTexture,
+    pub garen: ChampionTexture,
+    pub ash: ChampionTexture,
 }
 
 #[derive(Resource)]
@@ -66,7 +74,7 @@ pub struct SpellTexture {
 }
 
 #[derive(Resource, Clone)]
-pub struct GarenTexture {
+pub struct ChampionTexture {
     pub portrait: Handle<Image>,
     pub p: Vec<Handle<Image>>,
     pub q: Vec<Handle<Image>>,
