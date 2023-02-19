@@ -11,8 +11,8 @@ use crate::{
     constants::{
         ChampionTexture, GameInfo, Spell, SpellTexture, Team, Textures, ASH, ASH_E, ASH_P, ASH_Q,
         ASH_R, ASH_W, BARRIER, CIRCLE, CLARITY, CLEANSE, EXHAUST, FLASH, GAREN, GAREN_E,
-        GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R, GAREN_W, GHOST, HEAL, IGNITE, MAP, MARK, SMITE,
-        TELEPORT,
+        GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R, GAREN_W, GHOST, HEAL, IGNITE, MAP, MARK,
+        PORTRAIT_SCALE, SMITE, TELEPORT,
     },
     movement::Velocity,
 };
@@ -42,9 +42,9 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let spell_d = args[7].clone();
     let spell_f = args[8].clone();
 
-    let champion = match champion.as_str() {
-        "Garen" => Champions::GAREN,
-        "Ash" => Champions::ASH,
+    let champion = match champion.to_lowercase().as_str() {
+        "garen" => Champions::GAREN,
+        "ash" => Champions::ASH,
         _ => Champions::GAREN,
     };
 
@@ -160,6 +160,11 @@ fn init_game(
                 grow_hp: 98.,
                 hp_gen: 8.,
                 grow_hp_gen: 0.5,
+                mp: 0.,
+                grow_mp: 0.,
+                grow_mp_gen: 0.,
+                max_mp: 0.,
+                mp_gen: 0.,
                 ad: 66.,
                 grow_ad: 4.5,
                 ap: 0.,
@@ -179,6 +184,37 @@ fn init_game(
             };
             img = textures.garen.portrait.clone();
         }
+        Champions::ASH => {
+            champ = Champion {
+                hp: 640.,
+                max_hp: 640.,
+                grow_hp: 101.,
+                hp_gen: 3.5,
+                grow_hp_gen: 0.55,
+                mp: 280.,
+                max_mp: 280.,
+                grow_mp: 35.,
+                mp_gen: 6.97,
+                grow_mp_gen: 0.65,
+                ad: 59.,
+                grow_ad: 2.96,
+                ap: 0.,
+                grow_ap: 0.,
+                attack_speed: 0.658,
+                grow_attack_speed: 3.33,
+                def_ad: 26.,
+                grow_def_ad: 4.6,
+                def_ap: 30.,
+                grow_def_ap: 1.3,
+                hit_range: 600.,
+                move_speed: 325.,
+                cooldown: 0.,
+                crit_prob: 0,
+                name: Champions::ASH,
+                team: game_info.team.clone(),
+            };
+            img = textures.ash.portrait.clone();
+        }
     }
 
     let ms = champ.move_speed;
@@ -186,7 +222,7 @@ fn init_game(
         .spawn(SpriteBundle {
             texture: img,
             transform: Transform {
-                scale: Vec3::splat(0.3),
+                scale: Vec3::splat(PORTRAIT_SCALE),
                 translation: Vec3::new(-4800.0, -4400., 2.),
                 ..Default::default()
             },
