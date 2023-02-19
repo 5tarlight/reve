@@ -70,7 +70,8 @@ fn init_ui(
                 })
                 .add_children(|commands| {
                     let skill_image = match game_info.champion {
-                        Champions::Garen => &textures.garen,
+                        Champions::GAREN => &textures.garen,
+                        Champions::ASH => &textures.ash,
                     };
 
                     // Passive

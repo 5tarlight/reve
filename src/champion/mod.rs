@@ -5,7 +5,8 @@ use crate::constants::Team;
 pub mod class;
 
 pub enum Champions {
-    Garen,
+    GAREN,
+    ASH,
 }
 
 #[derive(Component)]
@@ -19,6 +20,11 @@ pub struct Champion {
     pub grow_hp: f32,
     pub hp_gen: f32,
     pub grow_hp_gen: f32,
+    pub mp: f32,
+    pub max_mp: f32,
+    pub grow_mp: f32,
+    pub mp_gen: f32,
+    pub grow_mp_gen: f32,
     /// Attack damage
     pub ad: f32,
     pub grow_ad: f32,
