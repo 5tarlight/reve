@@ -26,8 +26,13 @@ impl Plugin for InputPlugin {
             .add_system(cursor_spawn)
             .add_system(cursor_despawn)
             .add_system(explore_map_with_cursor)
-            .add_system(space_to_center);
-        // .add_system(grab_cursor);
+            .add_system(space_to_center)
+            .add_system(use_skill_q)
+            .add_system(use_skill_w)
+            .add_system(use_skill_e)
+            .add_system(use_skill_r)
+            .add_system(use_spell_d)
+            .add_system(use_spell_f);
     }
 }
 
@@ -239,3 +244,15 @@ fn space_to_center(
         ctf.translation.y = ptf.translation.y;
     }
 }
+
+fn use_skill_q() {}
+
+fn use_skill_w() {}
+
+fn use_skill_e() {}
+
+fn use_skill_r() {}
+
+fn use_spell_d() {}
+
+fn use_spell_f() {}

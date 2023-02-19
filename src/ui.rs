@@ -8,7 +8,7 @@ use bevy::{
 };
 
 use crate::{
-    champion::Champions,
+    champion::{Champion, Champions},
     constants::{
         GameInfo, Spell, Textures, PASSIVE_ICON_SIZE, SKILL_ICON_SIZE, SKILL_UI_H, SKILL_UI_W,
         SPELL_ICON_SIZE,
@@ -73,6 +73,7 @@ fn init_ui(
                         Champions::GAREN => &textures.garen,
                         Champions::ASH => &textures.ash,
                     };
+                    let [q, w, e, r] = Champion::get_skill_stats(game_info.champion);
 
                     // Passive
                     commands
@@ -113,7 +114,8 @@ fn init_ui(
                             image: skill_image.q[0].clone().into(),
                             ..Default::default()
                         })
-                        .insert(SkillQ);
+                        .insert(SkillQ)
+                        .insert(q);
 
                     // W
                     commands
@@ -132,7 +134,8 @@ fn init_ui(
                             image: skill_image.w[0].clone().into(),
                             ..Default::default()
                         })
-                        .insert(SkillW);
+                        .insert(SkillW)
+                        .insert(w);
 
                     // E
                     commands
@@ -151,7 +154,8 @@ fn init_ui(
                             image: skill_image.e[0].clone().into(),
                             ..Default::default()
                         })
-                        .insert(SkillE);
+                        .insert(SkillE)
+                        .insert(e);
 
                     // R
                     commands
@@ -170,7 +174,8 @@ fn init_ui(
                             image: skill_image.r[0].clone().into(),
                             ..Default::default()
                         })
-                        .insert(SkillR);
+                        .insert(SkillR)
+                        .insert(r);
 
                     fn get_spell_img(spell: Spell, textures: &Res<Textures>) -> Handle<Image> {
                         match spell {
