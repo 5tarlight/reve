@@ -11,9 +11,9 @@ use crate::{
 use bevy::{
     prelude::{
         BuildChildren, ButtonBundle, Color, Commands, Component, Entity, Handle, Image, NodeBundle,
-        Plugin, Query, Res, StartupStage, TextBundle,
+        Plugin, Query, Res, StartupStage, TextBundle, With,
     },
-    text::TextStyle,
+    text::{Text, TextStyle},
     time::Time,
     ui::{AlignSelf, BackgroundColor, JustifyContent, Size, Style, UiRect, Val},
     window::Windows,
@@ -24,7 +24,7 @@ pub struct ReveUiPlugin;
 impl Plugin for ReveUiPlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
         app.add_startup_system_to_stage(StartupStage::PostStartup, init_ui)
-            .add_system(update_skill_ui);
+            .add_system(update_skill_ui_q);
     }
 }
 
@@ -245,12 +245,29 @@ fn init_ui(
         });
 }
 
-fn update_skill_ui(
+#[derive(Component)]
+pub struct CooldodwnTextQ;
+
+#[derive(Component)]
+pub struct CooldodwnTextW;
+
+#[derive(Component)]
+pub struct CooldodwnTextE;
+
+#[derive(Component)]
+pub struct CooldodwnTextR;
+
+fn update_skill_ui_q(
     mut commands: Commands,
-    mut skill_query: Query<(Entity, &mut SkillStat)>,
+    mut skill_query: Query<(Entity, &mut SkillStat), With<SkillQ>>,
     textures: Res<Textures>,
+    mut text_query: Query<&mut Text, With<CooldodwnTextQ>>,
     time: Res<Time>,
 ) {
+    // for old_text in text_query.iter() {
+    //     println!("{:?}", old_text);
+    // }
+
     let d = time.delta().as_secs_f32();
 
     for (entity, mut stat) in skill_query.iter_mut() {
@@ -260,19 +277,27 @@ fn update_skill_ui(
                 // Display cooldown
                 let cool_str = cool.ceil().to_string();
                 commands.entity(entity).with_children(|parent| {
-                    parent.spawn(
-                        TextBundle::from_section(
-                            cool_str,
-                            TextStyle {
-                                font: textures.rix_font.clone(),
-                                font_size: 10.,
-                                color: Color::WHITE,
-                            },
-                        )
-                        .with_style(Style {
-                            ..Default::default()
-                        }),
-                    );
+                    if let Ok(mut text) = text_query.get_single_mut() {
+                        println!("Update old {:?}", text);
+                        text.sections[0].value = cool_str;
+                    } else {
+                        parent
+                            .spawn(
+                                TextBundle::from_section(
+                                    cool_str,
+                                    TextStyle {
+                                        font: textures.rix_font.clone(),
+                                        font_size: 20.,
+                                        color: Color::WHITE,
+                                    },
+                                )
+                                .with_style(Style {
+                                    ..Default::default()
+                                }),
+                            )
+                            .insert(CooldodwnTextQ)
+                            .insert(CooldodwnTextQ);
+                    }
                 });
 
                 // Update cooldown

@@ -23,7 +23,7 @@ pub struct SpellD;
 #[derive(Component)]
 pub struct SpellF;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum SkillCooldown {
     /// Normal time based cooldown system
     /// Skill Acceleration will affect this cooldown
@@ -33,13 +33,13 @@ pub enum SkillCooldown {
     Con(bool),
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum SkillCost {
     Mp(Vec<f32>),
     NoCost,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub enum SkillStatus {
     /// Skill Ready!
     Available,
@@ -59,7 +59,7 @@ pub enum SkillStatus {
     NotHave,
 }
 
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct SkillStat {
     pub cool: SkillCooldown,
     pub status: SkillStatus,

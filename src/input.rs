@@ -15,6 +15,7 @@ use crate::{
         MIN_MAP_X, MIN_MAP_Y,
     },
     movement::MoveToPoint,
+    skill::{SkillCooldown, SkillQ, SkillStat, SkillStatus},
 };
 
 pub struct InputPlugin;
@@ -245,7 +246,22 @@ fn space_to_center(
     }
 }
 
-fn use_skill_q() {}
+fn use_skill_q(key: Res<Input<KeyCode>>, mut skill_query: Query<&mut SkillStat, With<SkillQ>>) {
+    if key.pressed(KeyCode::Q) {
+        let mut stat = skill_query.get_single_mut().unwrap();
+        if stat.status == SkillStatus::Available {
+            // TODO : Use Skill Here
+
+            println!("{:?}", stat);
+            if let SkillCooldown::Sec(cool) = &stat.cool {
+                // TODO : use level cooldown system
+                stat.status = SkillStatus::Cooldown(cool[0]);
+            }
+
+            // TODO : Use Cost
+        }
+    }
+}
 
 fn use_skill_w() {}
 

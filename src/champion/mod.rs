@@ -120,7 +120,7 @@ impl Champion {
             Champions::GAREN => {
                 let q = SkillStat {
                     cool: SkillCooldown::Sec(vec![8., 8., 8., 8., 8.]),
-                    status: SkillStatus::NotHave,
+                    status: SkillStatus::Available,
                     cost: SkillCost::NoCost,
                 };
                 let w = SkillStat {
