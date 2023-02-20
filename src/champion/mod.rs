@@ -1,6 +1,9 @@
 use bevy::prelude::Component;
 
-use crate::constants::Team;
+use crate::{
+    constants::Team,
+    skill::{SkillCooldown, SkillCost, SkillStat, SkillStatus},
+};
 
 pub mod class;
 
@@ -107,8 +110,61 @@ impl Champion {
                 cooldown: 0.,
                 crit_prob: 0,
                 name: Champions::ASH,
-                team: team,
+                team,
             },
+        }
+    }
+
+    pub fn get_skill_stats(ch: Champions) -> [SkillStat; 4] {
+        match ch {
+            Champions::GAREN => {
+                let q = SkillStat {
+                    cool: SkillCooldown::Sec(vec![8., 8., 8., 8., 8.]),
+                    status: SkillStatus::Available,
+                    cost: SkillCost::NoCost,
+                };
+                let w = SkillStat {
+                    cool: SkillCooldown::Sec(vec![23., 21., 19., 17., 15.]),
+                    status: SkillStatus::NotHave,
+                    cost: SkillCost::NoCost,
+                };
+                let e = SkillStat {
+                    cool: SkillCooldown::Sec(vec![9., 9., 9., 9., 9.]),
+                    status: SkillStatus::NotHave,
+                    cost: SkillCost::NoCost,
+                };
+                let r = SkillStat {
+                    cool: SkillCooldown::Sec(vec![120., 100., 80.]),
+                    status: SkillStatus::NotHave,
+                    cost: SkillCost::NoCost,
+                };
+
+                [q, w, e, r]
+            }
+            Champions::ASH => {
+                let q = SkillStat {
+                    cool: SkillCooldown::Con(false),
+                    status: SkillStatus::NotHave,
+                    cost: SkillCost::Mp(vec![50., 50., 50., 50., 50.]),
+                };
+                let w = SkillStat {
+                    cool: SkillCooldown::Sec(vec![23., 21., 19., 17., 15.]),
+                    status: SkillStatus::NotHave,
+                    cost: SkillCost::Mp(vec![75., 70., 65., 60., 55.]),
+                };
+                let e = SkillStat {
+                    cool: SkillCooldown::Sec(vec![90., 80., 70., 60., 50.]),
+                    status: SkillStatus::NotHave,
+                    cost: SkillCost::NoCost,
+                };
+                let r = SkillStat {
+                    cool: SkillCooldown::Sec(vec![80., 70., 60.]),
+                    status: SkillStatus::NotHave,
+                    cost: SkillCost::Mp(vec![100., 100., 100., 100., 100.]),
+                };
+
+                [q, w, e, r]
+            }
         }
     }
 }

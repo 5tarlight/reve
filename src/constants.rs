@@ -1,4 +1,7 @@
-use bevy::prelude::{Handle, Image, Resource};
+use bevy::{
+    prelude::{Handle, Image, Resource},
+    text::Font,
+};
 
 use crate::champion::Champions;
 
@@ -14,10 +17,12 @@ pub const LOGO: &str = "REVE";
 pub const MAP: &str = "img/map.png";
 pub const CIRCLE: &str = "img/circle.png";
 pub const CURSOR_DURATION: f32 = 0.2;
+pub const RIX_FONT: &str = "fonts/rixgob.ttf";
 
 pub const PORTRAIT_SCALE: f32 = 0.8;
 pub const SKILL_UI_W: f32 = 400.;
 pub const SKILL_UI_H: f32 = 160.;
+pub const SKILL_COOL_TEXT_SIZE: f32 = 22.;
 pub const PASSIVE_ICON_SIZE: f32 = 32.;
 pub const SKILL_ICON_SIZE: f32 = 48.;
 pub const SPELL_ICON_SIZE: f32 = 40.;
@@ -54,6 +59,7 @@ pub struct Textures {
     pub map: Handle<Image>,
     pub cursor: Handle<Image>,
     pub spell: SpellTexture,
+    pub rix_font: Handle<Font>,
     pub garen: ChampionTexture,
     pub ash: ChampionTexture,
 }
@@ -90,7 +96,7 @@ pub enum Team {
 }
 
 #[derive(Resource, Clone, Copy)]
-pub enum Spell {
+pub enum Spells {
     BARRIER,
     CLARITY,
     CLEANSE,
@@ -112,6 +118,6 @@ pub struct GameInfo {
     pub room: String,
     pub team: Team,
     pub champion: Champions,
-    pub spell_d: Spell,
-    pub spell_f: Spell,
+    pub spell_d: Spells,
+    pub spell_f: Spells,
 }
