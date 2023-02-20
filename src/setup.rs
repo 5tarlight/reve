@@ -45,7 +45,7 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let champion = match champion.to_lowercase().as_str() {
         "garen" => Champions::GAREN,
         "ash" => Champions::ASH,
-        _ => Champions::GAREN,
+        _ => panic!("Unknown champion: {}", champion),
     };
 
     fn parse_spell(spell: &String) -> Spell {
@@ -61,7 +61,7 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
             "mark" => Spell::MARK,
             "smite" => Spell::SMITE,
             "teleport" => Spell::TELEPORT,
-            _ => Spell::FLASH,
+            _ => panic!("Unknown Spell: {}", spell),
         }
     }
 
