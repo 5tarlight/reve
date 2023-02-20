@@ -90,7 +90,7 @@ pub enum Team {
 }
 
 #[derive(Resource, Clone, Copy)]
-pub enum Spell {
+pub enum Spells {
     BARRIER,
     CLARITY,
     CLEANSE,
@@ -112,6 +112,6 @@ pub struct GameInfo {
     pub room: String,
     pub team: Team,
     pub champion: Champions,
-    pub spell_d: Spell,
-    pub spell_f: Spell,
+    pub spell_d: Spells,
+    pub spell_f: Spells,
 }

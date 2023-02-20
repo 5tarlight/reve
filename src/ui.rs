@@ -10,10 +10,10 @@ use bevy::{
 use crate::{
     champion::{Champion, Champions},
     constants::{
-        GameInfo, Spell, Textures, PASSIVE_ICON_SIZE, SKILL_ICON_SIZE, SKILL_UI_H, SKILL_UI_W,
+        GameInfo, Spells, Textures, PASSIVE_ICON_SIZE, SKILL_ICON_SIZE, SKILL_UI_H, SKILL_UI_W,
         SPELL_ICON_SIZE,
     },
-    skill::{SkillE, SkillP, SkillQ, SkillR, SkillW, SpellD, SpellF},
+    skill::{SkillE, SkillP, SkillQ, SkillR, SkillW, Spell, SpellD, SpellF},
 };
 
 pub struct ReveUiPlugin;
@@ -177,24 +177,26 @@ fn init_ui(
                         .insert(SkillR)
                         .insert(r);
 
-                    fn get_spell_img(spell: Spell, textures: &Res<Textures>) -> Handle<Image> {
+                    fn get_spell_img(spell: Spells, textures: &Res<Textures>) -> Handle<Image> {
                         match spell {
-                            Spell::BARRIER => textures.spell.barrier.clone(),
-                            Spell::CLARITY => textures.spell.clarity.clone(),
-                            Spell::CLEANSE => textures.spell.cleanse.clone(),
-                            Spell::EXHAUST => textures.spell.exhaust.clone(),
-                            Spell::FLASH => textures.spell.flash.clone(),
-                            Spell::GHOST => textures.spell.ghost.clone(),
-                            Spell::HEAL => textures.spell.heal.clone(),
-                            Spell::IGNITE => textures.spell.ignite.clone(),
-                            Spell::MARK => textures.spell.mark.clone(),
-                            Spell::SMITE => textures.spell.smite.clone(),
-                            Spell::TELEPORT => textures.spell.teleport.clone(),
+                            Spells::BARRIER => textures.spell.barrier.clone(),
+                            Spells::CLARITY => textures.spell.clarity.clone(),
+                            Spells::CLEANSE => textures.spell.cleanse.clone(),
+                            Spells::EXHAUST => textures.spell.exhaust.clone(),
+                            Spells::FLASH => textures.spell.flash.clone(),
+                            Spells::GHOST => textures.spell.ghost.clone(),
+                            Spells::HEAL => textures.spell.heal.clone(),
+                            Spells::IGNITE => textures.spell.ignite.clone(),
+                            Spells::MARK => textures.spell.mark.clone(),
+                            Spells::SMITE => textures.spell.smite.clone(),
+                            Spells::TELEPORT => textures.spell.teleport.clone(),
                         }
                     }
 
                     let icon_d = get_spell_img(game_info.spell_d, &textures);
                     let icon_f = get_spell_img(game_info.spell_f, &textures);
+                    let stat_d = Spell::get_spell_stat(game_info.spell_d);
+                    let stat_f = Spell::get_spell_stat(game_info.spell_f);
 
                     // D
                     commands
@@ -213,7 +215,8 @@ fn init_ui(
                             image: icon_d.into(),
                             ..Default::default()
                         })
-                        .insert(SpellD);
+                        .insert(SpellD)
+                        .insert(stat_d);
 
                     // F
                     commands
@@ -232,7 +235,8 @@ fn init_ui(
                             image: icon_f.into(),
                             ..Default::default()
                         })
-                        .insert(SpellF);
+                        .insert(SpellF)
+                        .insert(stat_f);
                 });
         });
 }

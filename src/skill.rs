@@ -1,5 +1,7 @@
 use bevy::prelude::Component;
 
+use crate::constants::Spells;
+
 #[derive(Component)]
 pub struct SkillP;
 
@@ -64,5 +66,73 @@ pub struct SkillStat {
     pub cost: SkillCost,
 }
 
+#[derive(Clone, Copy)]
+pub enum SpellCooldown {
+    Sec(f32),
+}
+
+#[derive(Clone, Copy)]
+pub enum SpellStatus {
+    Available,
+    Cooldown,
+    Disabled,
+}
+
 #[derive(Component)]
-pub struct SpellStat {}
+pub struct SpellStat {
+    pub cooldown: SpellCooldown,
+    pub status: SpellStatus,
+}
+
+pub struct Spell;
+
+impl Spell {
+    pub fn get_spell_stat(spell: Spells) -> SpellStat {
+        match spell {
+            Spells::SMITE => SpellStat {
+                cooldown: SpellCooldown::Sec(90.),
+                status: SpellStatus::Available,
+            },
+            Spells::GHOST => SpellStat {
+                cooldown: SpellCooldown::Sec(210.),
+                status: SpellStatus::Available,
+            },
+            Spells::HEAL => SpellStat {
+                cooldown: SpellCooldown::Sec(240.),
+                status: SpellStatus::Available,
+            },
+            Spells::TELEPORT => SpellStat {
+                cooldown: SpellCooldown::Sec(360.),
+                status: SpellStatus::Available,
+            },
+            Spells::CLEANSE => SpellStat {
+                cooldown: SpellCooldown::Sec(210.),
+                status: SpellStatus::Available,
+            },
+            Spells::BARRIER => SpellStat {
+                cooldown: SpellCooldown::Sec(180.),
+                status: SpellStatus::Available,
+            },
+            Spells::IGNITE => SpellStat {
+                cooldown: SpellCooldown::Sec(180.),
+                status: SpellStatus::Available,
+            },
+            Spells::EXHAUST => SpellStat {
+                cooldown: SpellCooldown::Sec(210.),
+                status: SpellStatus::Available,
+            },
+            Spells::FLASH => SpellStat {
+                cooldown: SpellCooldown::Sec(300.),
+                status: SpellStatus::Available,
+            },
+            Spells::MARK => SpellStat {
+                cooldown: SpellCooldown::Sec(48.),
+                status: SpellStatus::Available,
+            },
+            Spells::CLARITY => SpellStat {
+                cooldown: SpellCooldown::Sec(240.),
+                status: SpellStatus::Available,
+            },
+        }
+    }
+}
