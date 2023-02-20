@@ -1,26 +1,30 @@
-use bevy::{
-    prelude::{
-        BuildChildren, ButtonBundle, Color, Commands, Component, Handle, Image, NodeBundle, Plugin,
-        Res, StartupStage,
-    },
-    ui::{AlignSelf, BackgroundColor, JustifyContent, Size, Style, UiRect, Val},
-    window::Windows,
-};
-
 use crate::{
     champion::{Champion, Champions},
     constants::{
         GameInfo, Spells, Textures, PASSIVE_ICON_SIZE, SKILL_ICON_SIZE, SKILL_UI_H, SKILL_UI_W,
         SPELL_ICON_SIZE,
     },
-    skill::{SkillE, SkillP, SkillQ, SkillR, SkillW, Spell, SpellD, SpellF},
+    skill::{
+        SkillE, SkillP, SkillQ, SkillR, SkillStat, SkillStatus, SkillW, Spell, SpellD, SpellF,
+    },
+};
+use bevy::{
+    prelude::{
+        BuildChildren, ButtonBundle, Color, Commands, Component, Entity, Handle, Image, NodeBundle,
+        Plugin, Query, Res, StartupStage, TextBundle,
+    },
+    text::TextStyle,
+    time::Time,
+    ui::{AlignSelf, BackgroundColor, JustifyContent, Size, Style, UiRect, Val},
+    window::Windows,
 };
 
 pub struct ReveUiPlugin;
 
 impl Plugin for ReveUiPlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
-        app.add_startup_system_to_stage(StartupStage::PostStartup, init_ui);
+        app.add_startup_system_to_stage(StartupStage::PostStartup, init_ui)
+            .add_system(update_skill_ui);
     }
 }
 
@@ -239,4 +243,52 @@ fn init_ui(
                         .insert(stat_f);
                 });
         });
+}
+
+fn update_skill_ui(
+    mut commands: Commands,
+    mut skill_query: Query<(Entity, &mut SkillStat)>,
+    textures: Res<Textures>,
+    time: Res<Time>,
+) {
+    let d = time.delta().as_secs_f32();
+
+    for (entity, mut stat) in skill_query.iter_mut() {
+        match stat.status {
+            SkillStatus::Available => {}
+            SkillStatus::Cooldown(cool) => {
+                // Display cooldown
+                let cool_str = cool.ceil().to_string();
+                commands.entity(entity).with_children(|parent| {
+                    parent.spawn(
+                        TextBundle::from_section(
+                            cool_str,
+                            TextStyle {
+                                font: textures.rix_font.clone(),
+                                font_size: 10.,
+                                color: Color::WHITE,
+                            },
+                        )
+                        .with_style(Style {
+                            ..Default::default()
+                        }),
+                    );
+                });
+
+                // Update cooldown
+                let left = 0.0f32.max(cool - d);
+
+                if left > 0. {
+                    stat.status = SkillStatus::Cooldown(left);
+                } else {
+                    stat.status = SkillStatus::Available;
+                }
+            }
+            SkillStatus::Disabled => {}
+            SkillStatus::Active => {}
+            SkillStatus::NoMp => {}
+            SkillStatus::NotHave => {}
+            SkillStatus::StandBy => {}
+        }
+    }
 }

@@ -48,7 +48,7 @@ pub enum SkillStatus {
     /// Not enough mana to use skill
     NoMp,
     /// Skill is under cooldown
-    Cooldown,
+    Cooldown(f32),
     /// Skill disabled
     /// This does not mean some conditions required not acquired
     /// This means skill disabled by supression or so on
@@ -74,7 +74,7 @@ pub enum SpellCooldown {
 #[derive(Clone, Copy)]
 pub enum SpellStatus {
     Available,
-    Cooldown,
+    Cooldown(f32),
     Disabled,
 }
 

@@ -12,7 +12,7 @@ use crate::{
         ChampionTexture, GameInfo, SpellTexture, Spells, Team, Textures, ASH, ASH_E, ASH_P, ASH_Q,
         ASH_R, ASH_W, BARRIER, CIRCLE, CLARITY, CLEANSE, EXHAUST, FLASH, GAREN, GAREN_E,
         GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R, GAREN_W, GHOST, HEAL, IGNITE, MAP, MARK,
-        PORTRAIT_SCALE, SMITE, TELEPORT,
+        PORTRAIT_SCALE, RIX_FONT, SMITE, TELEPORT,
     },
     movement::Velocity,
 };
@@ -85,6 +85,7 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let textures = Textures {
         map: asset.load(MAP),
         cursor: asset.load(CIRCLE),
+        rix_font: asset.load(RIX_FONT),
         spell: SpellTexture {
             barrier: asset.load(BARRIER),
             clarity: asset.load(CLARITY),
