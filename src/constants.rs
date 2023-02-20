@@ -1,4 +1,7 @@
-use bevy::prelude::{Handle, Image, Resource};
+use bevy::{
+    prelude::{Handle, Image, Resource},
+    text::Font,
+};
 
 use crate::champion::Champions;
 
@@ -14,10 +17,12 @@ pub const LOGO: &str = "REVE";
 pub const MAP: &str = "img/map.png";
 pub const CIRCLE: &str = "img/circle.png";
 pub const CURSOR_DURATION: f32 = 0.2;
+pub const RIX_FONT: &str = "fonts/rixgob.ttf";
 
+pub const PORTRAIT_SCALE: f32 = 0.8;
 pub const SKILL_UI_W: f32 = 400.;
 pub const SKILL_UI_H: f32 = 160.;
-
+pub const SKILL_COOL_TEXT_SIZE: f32 = 22.;
 pub const PASSIVE_ICON_SIZE: f32 = 32.;
 pub const SKILL_ICON_SIZE: f32 = 48.;
 pub const SPELL_ICON_SIZE: f32 = 40.;
@@ -42,12 +47,21 @@ pub const GAREN_E: &str = "img/skill/garen/e.png";
 pub const GAREN_E_CANCEL: &str = "img/skill/garen/e_cancel.png";
 pub const GAREN_R: &str = "img/skill/garen/r.png";
 
+pub const ASH: &str = "img/champ/Ash.png";
+pub const ASH_P: &str = "img/skill/ash/p.png";
+pub const ASH_Q: &str = "img/skill/ash/q.png";
+pub const ASH_W: &str = "img/skill/ash/w.png";
+pub const ASH_E: &str = "img/skill/ash/e.png";
+pub const ASH_R: &str = "img/skill/ash/r.png";
+
 #[derive(Resource)]
 pub struct Textures {
     pub map: Handle<Image>,
     pub cursor: Handle<Image>,
     pub spell: SpellTexture,
-    pub garen: GarenTexture,
+    pub rix_font: Handle<Font>,
+    pub garen: ChampionTexture,
+    pub ash: ChampionTexture,
 }
 
 #[derive(Resource)]
@@ -66,7 +80,7 @@ pub struct SpellTexture {
 }
 
 #[derive(Resource, Clone)]
-pub struct GarenTexture {
+pub struct ChampionTexture {
     pub portrait: Handle<Image>,
     pub p: Vec<Handle<Image>>,
     pub q: Vec<Handle<Image>>,
@@ -82,7 +96,7 @@ pub enum Team {
 }
 
 #[derive(Resource, Clone, Copy)]
-pub enum Spell {
+pub enum Spells {
     BARRIER,
     CLARITY,
     CLEANSE,
@@ -96,7 +110,7 @@ pub enum Spell {
     TELEPORT,
 }
 
-#[derive(Resource)]
+#[derive(Resource, Clone)]
 pub struct GameInfo {
     pub username: String,
     pub token: String,
@@ -104,6 +118,6 @@ pub struct GameInfo {
     pub room: String,
     pub team: Team,
     pub champion: Champions,
-    pub spell_d: Spell,
-    pub spell_f: Spell,
+    pub spell_d: Spells,
+    pub spell_f: Spells,
 }

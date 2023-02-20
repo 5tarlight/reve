@@ -9,9 +9,10 @@ use bevy::{
 use crate::{
     champion::{Champion, Champions, MyPlayer},
     constants::{
-        GameInfo, GarenTexture, Spell, SpellTexture, Team, Textures, BARRIER, CIRCLE, CLARITY,
-        CLEANSE, EXHAUST, FLASH, GAREN, GAREN_E, GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R,
-        GAREN_W, GHOST, HEAL, IGNITE, MAP, MARK, SMITE, TELEPORT,
+        ChampionTexture, GameInfo, SpellTexture, Spells, Team, Textures, ASH, ASH_E, ASH_P, ASH_Q,
+        ASH_R, ASH_W, BARRIER, CIRCLE, CLARITY, CLEANSE, EXHAUST, FLASH, GAREN, GAREN_E,
+        GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R, GAREN_W, GHOST, HEAL, IGNITE, MAP, MARK,
+        PORTRAIT_SCALE, RIX_FONT, SMITE, TELEPORT,
     },
     movement::Velocity,
 };
@@ -41,25 +42,26 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let spell_d = args[7].clone();
     let spell_f = args[8].clone();
 
-    let champion = match champion.as_str() {
-        "Garen" => Champions::Garen,
-        _ => Champions::Garen,
+    let champion = match champion.to_lowercase().as_str() {
+        "garen" => Champions::GAREN,
+        "ash" => Champions::ASH,
+        _ => panic!("Unknown champion: {}", champion),
     };
 
-    fn parse_spell(spell: &String) -> Spell {
+    fn parse_spell(spell: &String) -> Spells {
         match spell.as_str() {
-            "barrier" => Spell::BARRIER,
-            "clarity" => Spell::CLARITY,
-            "cleanse" => Spell::CLEANSE,
-            "exhaust" => Spell::EXHAUST,
-            "flash" => Spell::FLASH,
-            "ghost" => Spell::GHOST,
-            "heal" => Spell::HEAL,
-            "ignite" => Spell::IGNITE,
-            "mark" => Spell::MARK,
-            "smite" => Spell::SMITE,
-            "teleport" => Spell::TELEPORT,
-            _ => Spell::FLASH,
+            "barrier" => Spells::BARRIER,
+            "clarity" => Spells::CLARITY,
+            "cleanse" => Spells::CLEANSE,
+            "exhaust" => Spells::EXHAUST,
+            "flash" => Spells::FLASH,
+            "ghost" => Spells::GHOST,
+            "heal" => Spells::HEAL,
+            "ignite" => Spells::IGNITE,
+            "mark" => Spells::MARK,
+            "smite" => Spells::SMITE,
+            "teleport" => Spells::TELEPORT,
+            _ => panic!("Unknown Spell: {}", spell),
         }
     }
 
@@ -83,6 +85,7 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
     let textures = Textures {
         map: asset.load(MAP),
         cursor: asset.load(CIRCLE),
+        rix_font: asset.load(RIX_FONT),
         spell: SpellTexture {
             barrier: asset.load(BARRIER),
             clarity: asset.load(CLARITY),
@@ -96,13 +99,21 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
             smite: asset.load(SMITE),
             teleport: asset.load(TELEPORT),
         },
-        garen: GarenTexture {
+        garen: ChampionTexture {
             portrait: asset.load(GAREN),
             p: vec![asset.load(GAREN_P)],
             q: vec![asset.load(GAREN_Q)],
             w: vec![asset.load(GAREN_W)],
             e: vec![asset.load(GAREN_E), asset.load(GAREN_E_CANCEL)],
             r: vec![asset.load(GAREN_R)],
+        },
+        ash: ChampionTexture {
+            portrait: asset.load(ASH),
+            p: vec![asset.load(ASH_P)],
+            q: vec![asset.load(ASH_Q)],
+            w: vec![asset.load(ASH_W)],
+            e: vec![asset.load(ASH_E)],
+            r: vec![asset.load(ASH_R)],
         },
     };
     commands.insert_resource(textures);
@@ -142,33 +153,10 @@ fn init_game(
     let champ: Champion;
     let img: Handle<Image>;
 
+    champ = Champion::new(game_info.champion, game_info.team);
     match game_info.champion {
-        Champions::Garen => {
-            champ = Champion {
-                max_hp: 690.,
-                hp: 690.,
-                grow_hp: 98.,
-                hp_gen: 8.,
-                grow_hp_gen: 0.5,
-                ad: 66.,
-                grow_ad: 4.5,
-                ap: 0.,
-                grow_ap: 0.,
-                attack_speed: 0.625,
-                grow_attack_speed: 3.65,
-                def_ad: 36.,
-                grow_def_ad: 4.2,
-                def_ap: 32.,
-                grow_def_ap: 1.55,
-                hit_range: 175.,
-                move_speed: 340.,
-                crit_prob: 0,
-                cooldown: 0.,
-                name: Champions::Garen,
-                team: game_info.team.clone(),
-            };
-            img = textures.garen.portrait.clone();
-        }
+        Champions::GAREN => img = textures.garen.portrait.clone(),
+        Champions::ASH => img = textures.ash.portrait.clone(),
     }
 
     let ms = champ.move_speed;
@@ -176,7 +164,7 @@ fn init_game(
         .spawn(SpriteBundle {
             texture: img,
             transform: Transform {
-                scale: Vec3::splat(0.3),
+                scale: Vec3::splat(PORTRAIT_SCALE),
                 translation: Vec3::new(-4800.0, -4400., 2.),
                 ..Default::default()
             },

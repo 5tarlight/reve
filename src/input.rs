@@ -15,6 +15,7 @@ use crate::{
         MIN_MAP_X, MIN_MAP_Y,
     },
     movement::MoveToPoint,
+    skill::{SkillCooldown, SkillQ, SkillStat, SkillStatus},
 };
 
 pub struct InputPlugin;
@@ -26,8 +27,13 @@ impl Plugin for InputPlugin {
             .add_system(cursor_spawn)
             .add_system(cursor_despawn)
             .add_system(explore_map_with_cursor)
-            .add_system(space_to_center);
-        // .add_system(grab_cursor);
+            .add_system(space_to_center)
+            .add_system(use_skill_q)
+            .add_system(use_skill_w)
+            .add_system(use_skill_e)
+            .add_system(use_skill_r)
+            .add_system(use_spell_d)
+            .add_system(use_spell_f);
     }
 }
 
@@ -239,3 +245,30 @@ fn space_to_center(
         ctf.translation.y = ptf.translation.y;
     }
 }
+
+fn use_skill_q(key: Res<Input<KeyCode>>, mut skill_query: Query<&mut SkillStat, With<SkillQ>>) {
+    if key.pressed(KeyCode::Q) {
+        let mut stat = skill_query.get_single_mut().unwrap();
+        if stat.status == SkillStatus::Available {
+            // TODO : Use Skill Here
+
+            println!("{:?}", stat);
+            if let SkillCooldown::Sec(cool) = &stat.cool {
+                // TODO : use level cooldown system
+                stat.status = SkillStatus::Cooldown(cool[0]);
+            }
+
+            // TODO : Use Cost
+        }
+    }
+}
+
+fn use_skill_w() {}
+
+fn use_skill_e() {}
+
+fn use_skill_r() {}
+
+fn use_spell_d() {}
+
+fn use_spell_f() {}

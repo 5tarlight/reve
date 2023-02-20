@@ -1,26 +1,30 @@
+use crate::{
+    champion::{Champion, Champions},
+    constants::{
+        GameInfo, Spells, Textures, PASSIVE_ICON_SIZE, SKILL_COOL_TEXT_SIZE, SKILL_ICON_SIZE,
+        SKILL_UI_H, SKILL_UI_W, SPELL_ICON_SIZE,
+    },
+    skill::{
+        SkillE, SkillP, SkillQ, SkillR, SkillStat, SkillStatus, SkillW, Spell, SpellD, SpellF,
+    },
+};
 use bevy::{
     prelude::{
-        BuildChildren, ButtonBundle, Color, Commands, Component, Handle, Image, NodeBundle, Plugin,
-        Res, StartupStage,
+        BuildChildren, ButtonBundle, Color, Commands, Component, Entity, Handle, Image, NodeBundle,
+        Plugin, Query, Res, StartupStage, TextBundle, With,
     },
+    text::{Text, TextStyle},
+    time::Time,
     ui::{AlignSelf, BackgroundColor, JustifyContent, Size, Style, UiRect, Val},
     window::Windows,
-};
-
-use crate::{
-    champion::Champions,
-    constants::{
-        GameInfo, Spell, Textures, PASSIVE_ICON_SIZE, SKILL_ICON_SIZE, SKILL_UI_H, SKILL_UI_W,
-        SPELL_ICON_SIZE,
-    },
-    skill::{SkillE, SkillP, SkillQ, SkillR, SkillW, SpellD, SpellF},
 };
 
 pub struct ReveUiPlugin;
 
 impl Plugin for ReveUiPlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
-        app.add_startup_system_to_stage(StartupStage::PostStartup, init_ui);
+        app.add_startup_system_to_stage(StartupStage::PostStartup, init_ui)
+            .add_system(update_skill_ui_q);
     }
 }
 
@@ -70,8 +74,10 @@ fn init_ui(
                 })
                 .add_children(|commands| {
                     let skill_image = match game_info.champion {
-                        Champions::Garen => &textures.garen,
+                        Champions::GAREN => &textures.garen,
+                        Champions::ASH => &textures.ash,
                     };
+                    let [q, w, e, r] = Champion::get_skill_stats(game_info.champion);
 
                     // Passive
                     commands
@@ -107,12 +113,14 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: skill_image.q[0].clone().into(),
                             ..Default::default()
                         })
-                        .insert(SkillQ);
+                        .insert(SkillQ)
+                        .insert(q);
 
                     // W
                     commands
@@ -126,12 +134,14 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: skill_image.w[0].clone().into(),
                             ..Default::default()
                         })
-                        .insert(SkillW);
+                        .insert(SkillW)
+                        .insert(w);
 
                     // E
                     commands
@@ -145,12 +155,14 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: skill_image.e[0].clone().into(),
                             ..Default::default()
                         })
-                        .insert(SkillE);
+                        .insert(SkillE)
+                        .insert(e);
 
                     // R
                     commands
@@ -164,31 +176,35 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: skill_image.r[0].clone().into(),
                             ..Default::default()
                         })
-                        .insert(SkillR);
+                        .insert(SkillR)
+                        .insert(r);
 
-                    fn get_spell_img(spell: Spell, textures: &Res<Textures>) -> Handle<Image> {
+                    fn get_spell_img(spell: Spells, textures: &Res<Textures>) -> Handle<Image> {
                         match spell {
-                            Spell::BARRIER => textures.spell.barrier.clone(),
-                            Spell::CLARITY => textures.spell.clarity.clone(),
-                            Spell::CLEANSE => textures.spell.cleanse.clone(),
-                            Spell::EXHAUST => textures.spell.exhaust.clone(),
-                            Spell::FLASH => textures.spell.flash.clone(),
-                            Spell::GHOST => textures.spell.ghost.clone(),
-                            Spell::HEAL => textures.spell.heal.clone(),
-                            Spell::IGNITE => textures.spell.ignite.clone(),
-                            Spell::MARK => textures.spell.mark.clone(),
-                            Spell::SMITE => textures.spell.smite.clone(),
-                            Spell::TELEPORT => textures.spell.teleport.clone(),
+                            Spells::BARRIER => textures.spell.barrier.clone(),
+                            Spells::CLARITY => textures.spell.clarity.clone(),
+                            Spells::CLEANSE => textures.spell.cleanse.clone(),
+                            Spells::EXHAUST => textures.spell.exhaust.clone(),
+                            Spells::FLASH => textures.spell.flash.clone(),
+                            Spells::GHOST => textures.spell.ghost.clone(),
+                            Spells::HEAL => textures.spell.heal.clone(),
+                            Spells::IGNITE => textures.spell.ignite.clone(),
+                            Spells::MARK => textures.spell.mark.clone(),
+                            Spells::SMITE => textures.spell.smite.clone(),
+                            Spells::TELEPORT => textures.spell.teleport.clone(),
                         }
                     }
 
                     let icon_d = get_spell_img(game_info.spell_d, &textures);
                     let icon_f = get_spell_img(game_info.spell_f, &textures);
+                    let stat_d = Spell::get_spell_stat(game_info.spell_d);
+                    let stat_f = Spell::get_spell_stat(game_info.spell_f);
 
                     // D
                     commands
@@ -202,12 +218,14 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: icon_d.into(),
                             ..Default::default()
                         })
-                        .insert(SpellD);
+                        .insert(SpellD)
+                        .insert(stat_d);
 
                     // F
                     commands
@@ -221,12 +239,94 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: icon_f.into(),
                             ..Default::default()
                         })
-                        .insert(SpellF);
+                        .insert(SpellF)
+                        .insert(stat_f);
                 });
         });
+}
+
+#[derive(Component)]
+pub struct CooldodwnTextQ;
+
+#[derive(Component)]
+pub struct CooldodwnTextW;
+
+#[derive(Component)]
+pub struct CooldodwnTextE;
+
+#[derive(Component)]
+pub struct CooldodwnTextR;
+
+fn update_skill_ui_q(
+    mut commands: Commands,
+    mut skill_query: Query<(Entity, &mut SkillStat), With<SkillQ>>,
+    textures: Res<Textures>,
+    mut text_query: Query<&mut Text, With<CooldodwnTextQ>>,
+    time: Res<Time>,
+) {
+    let d = time.delta().as_secs_f32();
+
+    for (entity, mut stat) in skill_query.iter_mut() {
+        match stat.status {
+            SkillStatus::Available => {
+                if let Ok(mut text) = text_query.get_single_mut() {
+                    text.sections[0].value = format!("");
+                }
+            }
+            SkillStatus::Cooldown(cool) => {
+                // Display cooldown
+                let cool_str = (if cool < 10. {
+                    (cool * 10.).ceil() / 10.
+                } else {
+                    cool.ceil()
+                })
+                .to_string();
+
+                commands.entity(entity).with_children(|parent| {
+                    if let Ok(mut text) = text_query.get_single_mut() {
+                        text.sections[0].value = cool_str;
+                    } else {
+                        parent
+                            .spawn(
+                                TextBundle::from_section(
+                                    cool_str,
+                                    TextStyle {
+                                        font: textures.rix_font.clone(),
+                                        font_size: SKILL_COOL_TEXT_SIZE,
+                                        color: Color::WHITE,
+                                    },
+                                )
+                                .with_style(Style {
+                                    align_self: AlignSelf::Center,
+                                    border: UiRect::all(Val::Px(1.)),
+                                    ..Default::default()
+                                }),
+                            )
+                            .insert(CooldodwnTextQ)
+                            .insert(CooldodwnTextQ);
+                    }
+                });
+
+                // Update cooldown
+                let left = 0.0f32.max(cool - d);
+
+                if left > 0. {
+                    stat.status = SkillStatus::Cooldown(left);
+                } else {
+                    stat.status = SkillStatus::Available;
+                }
+            }
+            SkillStatus::Disabled => {}
+            SkillStatus::Active => {}
+            SkillStatus::NoMp => {}
+            SkillStatus::NotHave => {}
+            SkillStatus::StandBy => {}
+        }
+    }
 }
