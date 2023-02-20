@@ -270,10 +270,6 @@ fn update_skill_ui_q(
     mut text_query: Query<&mut Text, With<CooldodwnTextQ>>,
     time: Res<Time>,
 ) {
-    // for old_text in text_query.iter() {
-    //     println!("{:?}", old_text);
-    // }
-
     let d = time.delta().as_secs_f32();
 
     for (entity, mut stat) in skill_query.iter_mut() {

@@ -119,8 +119,8 @@ impl Champion {
         match ch {
             Champions::GAREN => {
                 let q = SkillStat {
-                    cool: SkillCooldown::Sec(vec![15., 8., 8., 8., 8.]),
-                    status: SkillStatus::Available, // TODO : This is for TEST!!
+                    cool: SkillCooldown::Sec(vec![8., 8., 8., 8., 8.]),
+                    status: SkillStatus::Available,
                     cost: SkillCost::NoCost,
                 };
                 let w = SkillStat {
