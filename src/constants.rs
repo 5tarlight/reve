@@ -22,6 +22,7 @@ pub const RIX_FONT: &str = "fonts/rixgob.ttf";
 pub const PORTRAIT_SCALE: f32 = 0.8;
 pub const SKILL_UI_W: f32 = 400.;
 pub const SKILL_UI_H: f32 = 160.;
+pub const SKILL_COOL_TEXT_SIZE: f32 = 22.;
 pub const PASSIVE_ICON_SIZE: f32 = 32.;
 pub const SKILL_ICON_SIZE: f32 = 48.;
 pub const SPELL_ICON_SIZE: f32 = 40.;

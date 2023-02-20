@@ -1,8 +1,8 @@
 use crate::{
     champion::{Champion, Champions},
     constants::{
-        GameInfo, Spells, Textures, PASSIVE_ICON_SIZE, SKILL_ICON_SIZE, SKILL_UI_H, SKILL_UI_W,
-        SPELL_ICON_SIZE,
+        GameInfo, Spells, Textures, PASSIVE_ICON_SIZE, SKILL_COOL_TEXT_SIZE, SKILL_ICON_SIZE,
+        SKILL_UI_H, SKILL_UI_W, SPELL_ICON_SIZE,
     },
     skill::{
         SkillE, SkillP, SkillQ, SkillR, SkillStat, SkillStatus, SkillW, Spell, SpellD, SpellF,
@@ -113,6 +113,7 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: skill_image.q[0].clone().into(),
@@ -133,6 +134,7 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: skill_image.w[0].clone().into(),
@@ -153,6 +155,7 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: skill_image.e[0].clone().into(),
@@ -173,6 +176,7 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: skill_image.r[0].clone().into(),
@@ -214,6 +218,7 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: icon_d.into(),
@@ -234,6 +239,7 @@ fn init_ui(
                                     top: Val::Px(20.),
                                     bottom: Val::Px(60.),
                                 },
+                                justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
                             image: icon_f.into(),
@@ -272,13 +278,22 @@ fn update_skill_ui_q(
 
     for (entity, mut stat) in skill_query.iter_mut() {
         match stat.status {
-            SkillStatus::Available => {}
+            SkillStatus::Available => {
+                if let Ok(mut text) = text_query.get_single_mut() {
+                    text.sections[0].value = format!("");
+                }
+            }
             SkillStatus::Cooldown(cool) => {
                 // Display cooldown
-                let cool_str = cool.ceil().to_string();
+                let cool_str = (if cool < 10. {
+                    (cool * 10.).ceil() / 10.
+                } else {
+                    cool.ceil()
+                })
+                .to_string();
+
                 commands.entity(entity).with_children(|parent| {
                     if let Ok(mut text) = text_query.get_single_mut() {
-                        println!("Update old {:?}", text);
                         text.sections[0].value = cool_str;
                     } else {
                         parent
@@ -287,11 +302,13 @@ fn update_skill_ui_q(
                                     cool_str,
                                     TextStyle {
                                         font: textures.rix_font.clone(),
-                                        font_size: 20.,
+                                        font_size: SKILL_COOL_TEXT_SIZE,
                                         color: Color::WHITE,
                                     },
                                 )
                                 .with_style(Style {
+                                    align_self: AlignSelf::Center,
+                                    border: UiRect::all(Val::Px(1.)),
                                     ..Default::default()
                                 }),
                             )
