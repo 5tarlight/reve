@@ -236,13 +236,21 @@ fn space_to_center(
     key: Res<Input<KeyCode>>,
     player_query: Query<&Transform, (With<MyPlayer>, With<Champion>, Without<Camera2d>)>,
     mut cam_query: Query<&mut Transform, With<Camera2d>>,
+    windows: Res<Windows>,
 ) {
     if key.pressed(KeyCode::Space) {
+        let window = windows.get_primary().unwrap();
+        let hh = window.height() / 2.;
+        let hw = window.width() / 2.;
+
         let ptf = player_query.get_single().unwrap();
         let mut ctf = cam_query.get_single_mut().unwrap();
 
-        ctf.translation.x = ptf.translation.x;
-        ctf.translation.y = ptf.translation.y;
+        let x = ptf.translation.x;
+        let y = ptf.translation.y;
+
+        ctf.translation.x = (MIN_MAP_X + hw).max((MAX_MAP_X - hw).min(x));
+        ctf.translation.y = (MIN_MAP_Y + hh).max((MAX_MAP_Y - hh).min(y));
     }
 }
 
