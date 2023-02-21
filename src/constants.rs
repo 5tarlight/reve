@@ -39,6 +39,15 @@ pub const MARK: &str = "img/skill/spell/mark.png";
 pub const SMITE: &str = "img/skill/spell/smite.png";
 pub const TELEPORT: &str = "img/skill/spell/teleport.png";
 
+pub const BLUE_MELEE_MINION: &str = "img/mob/blue_melee_minion.png";
+pub const BLUE_CASTER_MINION: &str = "img/mob/blue_caster_minion.png";
+pub const BLUE_SIEGE_MINION: &str = "img/mob/blue_siege_minion.png";
+pub const BLUE_SUPER_MINION: &str = "img/mob/blue_super_minion.png";
+pub const RED_MELEE_MINION: &str = "img/mob/red_melee_minion.png";
+pub const RED_CASTER_MINION: &str = "img/mob/red_caster_minion.png";
+pub const RED_SIEGE_MINION: &str = "img/mob/red_siege_minion.png";
+pub const RED_SUPER_MINION: &str = "img/mob/red_super_minion.png";
+
 pub const GAREN: &str = "img/champ/Garen.png";
 pub const GAREN_P: &str = "img/skill/garen/p.png";
 pub const GAREN_Q: &str = "img/skill/garen/q.png";
@@ -60,11 +69,12 @@ pub struct Textures {
     pub cursor: Handle<Image>,
     pub spell: SpellTexture,
     pub rix_font: Handle<Font>,
+    pub mob: MobTexture,
     pub garen: ChampionTexture,
     pub ash: ChampionTexture,
 }
 
-#[derive(Resource)]
+#[derive(Clone)]
 pub struct SpellTexture {
     pub barrier: Handle<Image>,
     pub clarity: Handle<Image>,
@@ -79,7 +89,7 @@ pub struct SpellTexture {
     pub teleport: Handle<Image>,
 }
 
-#[derive(Resource, Clone)]
+#[derive(Clone)]
 pub struct ChampionTexture {
     pub portrait: Handle<Image>,
     pub p: Vec<Handle<Image>>,
@@ -87,6 +97,18 @@ pub struct ChampionTexture {
     pub w: Vec<Handle<Image>>,
     pub e: Vec<Handle<Image>>,
     pub r: Vec<Handle<Image>>,
+}
+
+#[derive(Clone)]
+pub struct MobTexture {
+    pub red_melee_minion: Handle<Image>,
+    pub red_caster_minion: Handle<Image>,
+    pub red_siege_minion: Handle<Image>,
+    pub red_super_minion: Handle<Image>,
+    pub blue_melee_minion: Handle<Image>,
+    pub blue_caster_minion: Handle<Image>,
+    pub blue_siege_minion: Handle<Image>,
+    pub blue_super_minion: Handle<Image>,
 }
 
 #[derive(Clone, Copy)]
