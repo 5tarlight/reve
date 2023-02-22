@@ -15,6 +15,13 @@ impl Plugin for TimerPlugin {
 #[derive(Component)]
 pub struct GameTimer(f32);
 
+impl GameTimer {
+    pub fn as_secs(m: u32, s: u32) -> f32 {
+        let secs = m * 60 + s;
+        secs as f32
+    }
+}
+
 fn spawn_timer(mut commands: Commands) {
     commands.spawn_empty().insert(GameTimer(0.));
 }
