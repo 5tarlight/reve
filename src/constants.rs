@@ -47,6 +47,12 @@ pub const RED_MELEE_MINION: &str = "img/mob/red_melee_minion.png";
 pub const RED_CASTER_MINION: &str = "img/mob/red_caster_minion.png";
 pub const RED_SIEGE_MINION: &str = "img/mob/red_siege_minion.png";
 pub const RED_SUPER_MINION: &str = "img/mob/red_super_minion.png";
+pub const BLUE_TOP_MINION_SPAWN: (f32, f32) = (-4300., -3400.);
+pub const BLUE_MID_MINION_SPAWN: (f32, f32) = (-3600., -3500.);
+pub const BLUE_BOT_MINION_SPAWN: (f32, f32) = (-3500., -4000.);
+pub const RED_TOP_MINION_SPAWN: (f32, f32) = (4100., 3400.);
+pub const RED_MID_MINION_SPAWN: (f32, f32) = (4000., 2800.);
+pub const RED_BOT_MINION_SPAWN: (f32, f32) = (4800., 2800.);
 
 pub const GAREN: &str = "img/champ/Garen.png";
 pub const GAREN_P: &str = "img/skill/garen/p.png";
