@@ -59,6 +59,9 @@ pub const MINION_SPAWN_GAP: f32 = 30.;
 pub const MINION_PHASE_1: i32 = 845;
 /// 25m 5s
 pub const MINION_PHASE_2: i32 = 1505;
+pub const MINION_SCALE: f32 = 0.4;
+pub const SUPER_MINION_SCALE: f32 = 0.6;
+pub const MINION_VEL: f32 = 325.;
 
 pub const GAREN: &str = "img/champ/Garen.png";
 pub const GAREN_P: &str = "img/skill/garen/p.png";
