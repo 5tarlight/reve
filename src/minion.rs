@@ -73,10 +73,13 @@ fn spawn_minions(
     let mut counter = counter_query.get_single_mut().unwrap();
     let booked = ((time - MINION_SPAWN_START) / MINION_SPAWN_GAP).floor() as i32;
 
-    println!("{time} {booked}");
+    // println!("{time} {booked}");
 
     if booked >= counter.0 as i32 {
         // Spawn new wave
+
+        counter.0 += 1;
+
         let mut siege = false;
 
         if time < MINION_PHASE_1 as f32 {
@@ -102,6 +105,13 @@ fn spawn_minions(
                 if i == 2 && siege {
                     commands.spawn(SpawnMinionAfter::new(
                         i as f32,
+                        loc,
+                        MinionType::Melee,
+                        Team::Blue,
+                    ));
+
+                    commands.spawn(SpawnMinionAfter::new(
+                        (i + 1) as f32,
                         loc,
                         MinionType::Siege,
                         Team::Blue,
@@ -152,6 +162,13 @@ fn spawn_minions(
                     commands.spawn(SpawnMinionAfter::new(
                         i as f32,
                         loc,
+                        MinionType::Melee,
+                        Team::Red,
+                    ));
+
+                    commands.spawn(SpawnMinionAfter::new(
+                        (i + 1) as f32,
+                        loc,
                         MinionType::Siege,
                         Team::Red,
                     ));
@@ -189,7 +206,6 @@ fn spawn_minions(
                 }
             }
         }
-        counter.0 += 1;
     }
 }
 
@@ -217,6 +233,7 @@ fn gen_minions(
                     MinionType::Super => texture.mob.red_super_minion.clone(),
                 },
             };
+
             let scale = if after.2 == MinionType::Super {
                 SUPER_MINION_SCALE
             } else {
