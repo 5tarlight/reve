@@ -13,6 +13,9 @@ impl Plugin for TimerPlugin {
 }
 
 #[derive(Component)]
+pub struct TimeManager;
+
+#[derive(Component)]
 pub struct GameTimer(f32);
 
 impl GameTimer {
@@ -23,7 +26,10 @@ impl GameTimer {
 }
 
 fn spawn_timer(mut commands: Commands) {
-    commands.spawn_empty().insert(GameTimer(0.));
+    commands
+        .spawn_empty()
+        .insert(TimeManager)
+        .insert(GameTimer(0.));
 }
 
 fn update_timer(mut timer_query: Query<&mut GameTimer>, time: Res<Time>) {
