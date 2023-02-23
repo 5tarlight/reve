@@ -9,10 +9,12 @@ use bevy::{
 use crate::{
     champion::{Champion, Champions, MyPlayer},
     constants::{
-        ChampionTexture, GameInfo, SpellTexture, Spells, Team, Textures, ASH, ASH_E, ASH_P, ASH_Q,
-        ASH_R, ASH_W, BARRIER, CIRCLE, CLARITY, CLEANSE, EXHAUST, FLASH, GAREN, GAREN_E,
-        GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R, GAREN_W, GHOST, HEAL, IGNITE, MAP, MARK,
-        PORTRAIT_SCALE, RIX_FONT, SMITE, TELEPORT,
+        ChampionTexture, GameInfo, MobTexture, SpellTexture, Spells, Team, Textures, ASH, ASH_E,
+        ASH_P, ASH_Q, ASH_R, ASH_W, BARRIER, BLUE_CASTER_MINION, BLUE_MELEE_MINION,
+        BLUE_SIEGE_MINION, BLUE_SUPER_MINION, CIRCLE, CLARITY, CLEANSE, EXHAUST, FLASH, GAREN,
+        GAREN_E, GAREN_E_CANCEL, GAREN_P, GAREN_Q, GAREN_R, GAREN_W, GHOST, HEAL, IGNITE, MAP,
+        MARK, PORTRAIT_SCALE, RED_CASTER_MINION, RED_MELEE_MINION, RED_SIEGE_MINION,
+        RED_SUPER_MINION, RIX_FONT, SMITE, TELEPORT,
     },
     movement::Velocity,
 };
@@ -86,6 +88,16 @@ fn setup(mut commands: Commands, asset: Res<AssetServer>) {
         map: asset.load(MAP),
         cursor: asset.load(CIRCLE),
         rix_font: asset.load(RIX_FONT),
+        mob: MobTexture {
+            blue_melee_minion: asset.load(BLUE_MELEE_MINION),
+            blue_caster_minion: asset.load(BLUE_CASTER_MINION),
+            blue_siege_minion: asset.load(BLUE_SIEGE_MINION),
+            blue_super_minion: asset.load(BLUE_SUPER_MINION),
+            red_melee_minion: asset.load(RED_MELEE_MINION),
+            red_caster_minion: asset.load(RED_CASTER_MINION),
+            red_siege_minion: asset.load(RED_SIEGE_MINION),
+            red_super_minion: asset.load(RED_SUPER_MINION),
+        },
         spell: SpellTexture {
             barrier: asset.load(BARRIER),
             clarity: asset.load(CLARITY),

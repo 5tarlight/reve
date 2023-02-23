@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
-use reve::{input::InputPlugin, movement::MovementPlugin, setup::SetupPlugin, ui::ReveUiPlugin};
+use reve::{
+    input::InputPlugin, minion::MinionPlugin, movement::MovementPlugin, setup::SetupPlugin,
+    timer::TimerPlugin, ui::ReveUiPlugin,
+};
 
 fn main() {
     App::new()
@@ -18,5 +21,7 @@ fn main() {
         .add_plugin(InputPlugin)
         .add_plugin(MovementPlugin)
         .add_plugin(ReveUiPlugin)
+        .add_plugin(TimerPlugin)
+        .add_plugin(MinionPlugin)
         .run();
 }
