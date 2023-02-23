@@ -1,6 +1,7 @@
 pub mod champion;
 pub mod constants;
 pub mod input;
+pub mod minion;
 pub mod movement;
 pub mod setup;
 pub mod skill;
