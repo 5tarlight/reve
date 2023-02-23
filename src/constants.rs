@@ -53,6 +53,12 @@ pub const BLUE_BOT_MINION_SPAWN: (f32, f32) = (-3500., -4000.);
 pub const RED_TOP_MINION_SPAWN: (f32, f32) = (4100., 3400.);
 pub const RED_MID_MINION_SPAWN: (f32, f32) = (4000., 2800.);
 pub const RED_BOT_MINION_SPAWN: (f32, f32) = (4800., 2800.);
+pub const MINION_SPAWN_START: f32 = 65.;
+pub const MINION_SPAWN_GAP: f32 = 30.;
+/// 14m 5s
+pub const MINION_PHASE_1: i32 = 845;
+/// 25m 5s
+pub const MINION_PHASE_2: i32 = 1505;
 
 pub const GAREN: &str = "img/champ/Garen.png";
 pub const GAREN_P: &str = "img/skill/garen/p.png";

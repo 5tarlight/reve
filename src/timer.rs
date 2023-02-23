@@ -16,7 +16,7 @@ impl Plugin for TimerPlugin {
 pub struct TimeManager;
 
 #[derive(Component)]
-pub struct GameTimer(f32);
+pub struct GameTimer(pub f32);
 
 impl GameTimer {
     pub fn as_secs(m: u32, s: u32) -> f32 {
