@@ -1,5 +1,6 @@
 pub mod champion;
 pub mod constants;
+pub mod entity;
 pub mod input;
 pub mod minion;
 pub mod movement;

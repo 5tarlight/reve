@@ -16,6 +16,7 @@ use crate::{
         MARK, PORTRAIT_SCALE, RED_CASTER_MINION, RED_MELEE_MINION, RED_SIEGE_MINION,
         RED_SUPER_MINION, RIX_FONT, SMITE, TELEPORT,
     },
+    entity::Damagable,
     movement::Velocity,
 };
 
@@ -184,5 +185,6 @@ fn init_game(
         })
         .insert(champ)
         .insert(MyPlayer)
-        .insert(Velocity(ms));
+        .insert(Velocity(ms))
+        .insert(Damagable::default());
 }
