@@ -15,7 +15,10 @@ use bevy::{
     },
     text::{Text, TextStyle},
     time::Time,
-    ui::{AlignSelf, BackgroundColor, JustifyContent, Size, Style, UiRect, Val},
+    ui::{
+        AlignContent, AlignSelf, BackgroundColor, FlexDirection, JustifyContent, Size, Style,
+        UiRect, Val,
+    },
     window::Windows,
 };
 
@@ -30,6 +33,12 @@ impl Plugin for ReveUiPlugin {
 
 #[derive(Component)]
 pub struct SkillUiParent;
+
+/// Ui consumes percent of parent width.
+/// Recommended for HP, MP.<br>
+/// Value is 0 ~ 100
+#[derive(Component)]
+pub struct PercentWidth(f32);
 
 fn init_ui(
     mut commands: Commands,
@@ -62,6 +71,8 @@ fn init_ui(
                         },
                         margin: UiRect::top(Val::Px(h - SKILL_UI_H)),
                         justify_content: JustifyContent::Center,
+                        align_content: AlignContent::Center,
+                        flex_direction: FlexDirection::Column,
                         ..Default::default()
                     },
                     background_color: BackgroundColor(Color::Rgba {
@@ -73,180 +84,258 @@ fn init_ui(
                     ..Default::default()
                 })
                 .add_children(|commands| {
-                    let skill_image = match game_info.champion {
-                        Champions::GAREN => &textures.garen,
-                        Champions::ASH => &textures.ash,
-                    };
-                    let [q, w, e, r] = Champion::get_skill_stats(game_info.champion);
-
-                    // Passive
+                    // Skill UI Box
                     commands
-                        .spawn(ButtonBundle {
+                        .spawn(NodeBundle {
                             style: Style {
-                                size: Size::new(
-                                    Val::Px(PASSIVE_ICON_SIZE),
-                                    Val::Px(PASSIVE_ICON_SIZE),
-                                ),
-                                align_self: AlignSelf::FlexEnd,
-                                margin: UiRect {
-                                    left: Val::Px(5.),
-                                    right: Val::Px(10.),
-                                    top: Val::Px(20.),
-                                    bottom: Val::Px(60.),
-                                },
-                                ..Default::default()
-                            },
-                            image: skill_image.p[0].clone().into(),
-                            ..Default::default()
-                        })
-                        .insert(SkillP);
-
-                    // Q
-                    commands
-                        .spawn(ButtonBundle {
-                            style: Style {
-                                size: Size::new(Val::Px(SKILL_ICON_SIZE), Val::Px(SKILL_ICON_SIZE)),
-                                align_self: AlignSelf::FlexEnd,
-                                margin: UiRect {
-                                    left: Val::Px(5.),
-                                    right: Val::Px(5.),
-                                    top: Val::Px(20.),
-                                    bottom: Val::Px(60.),
-                                },
+                                align_content: AlignContent::Center,
                                 justify_content: JustifyContent::Center,
                                 ..Default::default()
                             },
-                            image: skill_image.q[0].clone().into(),
                             ..Default::default()
                         })
-                        .insert(SkillQ)
-                        .insert(q);
+                        .with_children(|commands| {
+                            let skill_image = match game_info.champion {
+                                Champions::GAREN => &textures.garen,
+                                Champions::ASH => &textures.ash,
+                            };
+                            let [q, w, e, r] = Champion::get_skill_stats(game_info.champion);
 
-                    // W
+                            // Passive
+                            commands
+                                .spawn(ButtonBundle {
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(PASSIVE_ICON_SIZE),
+                                            Val::Px(PASSIVE_ICON_SIZE),
+                                        ),
+                                        align_self: AlignSelf::FlexEnd,
+                                        margin: UiRect {
+                                            left: Val::Px(5.),
+                                            right: Val::Px(10.),
+                                            top: Val::Px(20.),
+                                            bottom: Val::Px(60.),
+                                        },
+                                        ..Default::default()
+                                    },
+                                    image: skill_image.p[0].clone().into(),
+                                    ..Default::default()
+                                })
+                                .insert(SkillP);
+
+                            // Q
+                            commands
+                                .spawn(ButtonBundle {
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(SKILL_ICON_SIZE),
+                                            Val::Px(SKILL_ICON_SIZE),
+                                        ),
+                                        align_self: AlignSelf::FlexEnd,
+                                        margin: UiRect {
+                                            left: Val::Px(5.),
+                                            right: Val::Px(5.),
+                                            top: Val::Px(20.),
+                                            bottom: Val::Px(60.),
+                                        },
+                                        justify_content: JustifyContent::Center,
+                                        ..Default::default()
+                                    },
+                                    image: skill_image.q[0].clone().into(),
+                                    ..Default::default()
+                                })
+                                .insert(SkillQ)
+                                .insert(q);
+
+                            // W
+                            commands
+                                .spawn(ButtonBundle {
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(SKILL_ICON_SIZE),
+                                            Val::Px(SKILL_ICON_SIZE),
+                                        ),
+                                        align_self: AlignSelf::FlexEnd,
+                                        margin: UiRect {
+                                            left: Val::Px(5.),
+                                            right: Val::Px(5.),
+                                            top: Val::Px(20.),
+                                            bottom: Val::Px(60.),
+                                        },
+                                        justify_content: JustifyContent::Center,
+                                        ..Default::default()
+                                    },
+                                    image: skill_image.w[0].clone().into(),
+                                    ..Default::default()
+                                })
+                                .insert(SkillW)
+                                .insert(w);
+
+                            // E
+                            commands
+                                .spawn(ButtonBundle {
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(SKILL_ICON_SIZE),
+                                            Val::Px(SKILL_ICON_SIZE),
+                                        ),
+                                        align_self: AlignSelf::FlexEnd,
+                                        margin: UiRect {
+                                            left: Val::Px(5.),
+                                            right: Val::Px(5.),
+                                            top: Val::Px(20.),
+                                            bottom: Val::Px(60.),
+                                        },
+                                        justify_content: JustifyContent::Center,
+                                        ..Default::default()
+                                    },
+                                    image: skill_image.e[0].clone().into(),
+                                    ..Default::default()
+                                })
+                                .insert(SkillE)
+                                .insert(e);
+
+                            // R
+                            commands
+                                .spawn(ButtonBundle {
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(SKILL_ICON_SIZE),
+                                            Val::Px(SKILL_ICON_SIZE),
+                                        ),
+                                        align_self: AlignSelf::FlexEnd,
+                                        margin: UiRect {
+                                            left: Val::Px(5.),
+                                            right: Val::Px(5.),
+                                            top: Val::Px(20.),
+                                            bottom: Val::Px(60.),
+                                        },
+                                        justify_content: JustifyContent::Center,
+                                        ..Default::default()
+                                    },
+                                    image: skill_image.r[0].clone().into(),
+                                    ..Default::default()
+                                })
+                                .insert(SkillR)
+                                .insert(r);
+
+                            fn get_spell_img(
+                                spell: Spells,
+                                textures: &Res<Textures>,
+                            ) -> Handle<Image> {
+                                match spell {
+                                    Spells::BARRIER => textures.spell.barrier.clone(),
+                                    Spells::CLARITY => textures.spell.clarity.clone(),
+                                    Spells::CLEANSE => textures.spell.cleanse.clone(),
+                                    Spells::EXHAUST => textures.spell.exhaust.clone(),
+                                    Spells::FLASH => textures.spell.flash.clone(),
+                                    Spells::GHOST => textures.spell.ghost.clone(),
+                                    Spells::HEAL => textures.spell.heal.clone(),
+                                    Spells::IGNITE => textures.spell.ignite.clone(),
+                                    Spells::MARK => textures.spell.mark.clone(),
+                                    Spells::SMITE => textures.spell.smite.clone(),
+                                    Spells::TELEPORT => textures.spell.teleport.clone(),
+                                }
+                            }
+
+                            let icon_d = get_spell_img(game_info.spell_d, &textures);
+                            let icon_f = get_spell_img(game_info.spell_f, &textures);
+                            let stat_d = Spell::get_spell_stat(game_info.spell_d);
+                            let stat_f = Spell::get_spell_stat(game_info.spell_f);
+
+                            // D
+                            commands
+                                .spawn(ButtonBundle {
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(SPELL_ICON_SIZE),
+                                            Val::Px(SPELL_ICON_SIZE),
+                                        ),
+                                        align_self: AlignSelf::FlexEnd,
+                                        margin: UiRect {
+                                            left: Val::Px(15.),
+                                            right: Val::Px(5.),
+                                            top: Val::Px(20.),
+                                            bottom: Val::Px(60.),
+                                        },
+                                        justify_content: JustifyContent::Center,
+                                        ..Default::default()
+                                    },
+                                    image: icon_d.into(),
+                                    ..Default::default()
+                                })
+                                .insert(SpellD)
+                                .insert(stat_d);
+
+                            // F
+                            commands
+                                .spawn(ButtonBundle {
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(SPELL_ICON_SIZE),
+                                            Val::Px(SPELL_ICON_SIZE),
+                                        ),
+                                        align_self: AlignSelf::FlexEnd,
+                                        margin: UiRect {
+                                            left: Val::Px(5.),
+                                            right: Val::Px(5.),
+                                            top: Val::Px(20.),
+                                            bottom: Val::Px(60.),
+                                        },
+                                        justify_content: JustifyContent::Center,
+                                        ..Default::default()
+                                    },
+                                    image: icon_f.into(),
+                                    ..Default::default()
+                                })
+                                .insert(SpellF)
+                                .insert(stat_f);
+                        });
+
+                    // Health UI Box
                     commands
-                        .spawn(ButtonBundle {
+                        .spawn(NodeBundle {
                             style: Style {
-                                size: Size::new(Val::Px(SKILL_ICON_SIZE), Val::Px(SKILL_ICON_SIZE)),
-                                align_self: AlignSelf::FlexEnd,
-                                margin: UiRect {
-                                    left: Val::Px(5.),
-                                    right: Val::Px(5.),
-                                    top: Val::Px(20.),
-                                    bottom: Val::Px(60.),
-                                },
+                                flex_direction: FlexDirection::Column,
                                 justify_content: JustifyContent::Center,
+                                size: Size {
+                                    width: Val::Percent(80.),
+                                    height: Val::Auto,
+                                },
+                                margin: UiRect::top(Val::Px(-35.)),
                                 ..Default::default()
                             },
-                            image: skill_image.w[0].clone().into(),
                             ..Default::default()
                         })
-                        .insert(SkillW)
-                        .insert(w);
-
-                    // E
-                    commands
-                        .spawn(ButtonBundle {
-                            style: Style {
-                                size: Size::new(Val::Px(SKILL_ICON_SIZE), Val::Px(SKILL_ICON_SIZE)),
-                                align_self: AlignSelf::FlexEnd,
-                                margin: UiRect {
-                                    left: Val::Px(5.),
-                                    right: Val::Px(5.),
-                                    top: Val::Px(20.),
-                                    bottom: Val::Px(60.),
+                        .with_children(|commands| {
+                            // HP
+                            commands.spawn(NodeBundle {
+                                style: Style {
+                                    size: Size {
+                                        width: Val::Percent(100.),
+                                        height: Val::Px(15.),
+                                    },
+                                    margin: UiRect::left(Val::Px(SKILL_UI_W * 0.2 / 2.)),
+                                    ..Default::default()
                                 },
-                                justify_content: JustifyContent::Center,
+                                background_color: BackgroundColor(Color::rgba_u8(0, 255, 0, 255)),
                                 ..Default::default()
-                            },
-                            image: skill_image.e[0].clone().into(),
-                            ..Default::default()
-                        })
-                        .insert(SkillE)
-                        .insert(e);
+                            });
 
-                    // R
-                    commands
-                        .spawn(ButtonBundle {
-                            style: Style {
-                                size: Size::new(Val::Px(SKILL_ICON_SIZE), Val::Px(SKILL_ICON_SIZE)),
-                                align_self: AlignSelf::FlexEnd,
-                                margin: UiRect {
-                                    left: Val::Px(5.),
-                                    right: Val::Px(5.),
-                                    top: Val::Px(20.),
-                                    bottom: Val::Px(60.),
+                            // MP
+                            commands.spawn(NodeBundle {
+                                style: Style {
+                                    size: Size {
+                                        width: Val::Percent(100.),
+                                        height: Val::Px(15.),
+                                    },
+                                    margin: UiRect::left(Val::Px(SKILL_UI_W * 0.2 / 2.)),
+                                    ..Default::default()
                                 },
-                                justify_content: JustifyContent::Center,
+                                background_color: BackgroundColor(Color::rgba_u8(0, 0, 255, 255)),
                                 ..Default::default()
-                            },
-                            image: skill_image.r[0].clone().into(),
-                            ..Default::default()
-                        })
-                        .insert(SkillR)
-                        .insert(r);
-
-                    fn get_spell_img(spell: Spells, textures: &Res<Textures>) -> Handle<Image> {
-                        match spell {
-                            Spells::BARRIER => textures.spell.barrier.clone(),
-                            Spells::CLARITY => textures.spell.clarity.clone(),
-                            Spells::CLEANSE => textures.spell.cleanse.clone(),
-                            Spells::EXHAUST => textures.spell.exhaust.clone(),
-                            Spells::FLASH => textures.spell.flash.clone(),
-                            Spells::GHOST => textures.spell.ghost.clone(),
-                            Spells::HEAL => textures.spell.heal.clone(),
-                            Spells::IGNITE => textures.spell.ignite.clone(),
-                            Spells::MARK => textures.spell.mark.clone(),
-                            Spells::SMITE => textures.spell.smite.clone(),
-                            Spells::TELEPORT => textures.spell.teleport.clone(),
-                        }
-                    }
-
-                    let icon_d = get_spell_img(game_info.spell_d, &textures);
-                    let icon_f = get_spell_img(game_info.spell_f, &textures);
-                    let stat_d = Spell::get_spell_stat(game_info.spell_d);
-                    let stat_f = Spell::get_spell_stat(game_info.spell_f);
-
-                    // D
-                    commands
-                        .spawn(ButtonBundle {
-                            style: Style {
-                                size: Size::new(Val::Px(SPELL_ICON_SIZE), Val::Px(SPELL_ICON_SIZE)),
-                                align_self: AlignSelf::FlexEnd,
-                                margin: UiRect {
-                                    left: Val::Px(15.),
-                                    right: Val::Px(5.),
-                                    top: Val::Px(20.),
-                                    bottom: Val::Px(60.),
-                                },
-                                justify_content: JustifyContent::Center,
-                                ..Default::default()
-                            },
-                            image: icon_d.into(),
-                            ..Default::default()
-                        })
-                        .insert(SpellD)
-                        .insert(stat_d);
-
-                    // F
-                    commands
-                        .spawn(ButtonBundle {
-                            style: Style {
-                                size: Size::new(Val::Px(SPELL_ICON_SIZE), Val::Px(SPELL_ICON_SIZE)),
-                                align_self: AlignSelf::FlexEnd,
-                                margin: UiRect {
-                                    left: Val::Px(5.),
-                                    right: Val::Px(5.),
-                                    top: Val::Px(20.),
-                                    bottom: Val::Px(60.),
-                                },
-                                justify_content: JustifyContent::Center,
-                                ..Default::default()
-                            },
-                            image: icon_f.into(),
-                            ..Default::default()
-                        })
-                        .insert(SpellF)
-                        .insert(stat_f);
+                            });
+                        });
                 });
         });
 }
