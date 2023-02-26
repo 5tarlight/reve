@@ -16,8 +16,8 @@ use bevy::{
     text::{Text, TextStyle},
     time::Time,
     ui::{
-        AlignContent, AlignSelf, BackgroundColor, FlexDirection, JustifyContent, Size, Style,
-        UiRect, Val,
+        AlignContent, AlignSelf, BackgroundColor, FlexDirection, JustifyContent, Overflow, Size,
+        Style, UiRect, Val,
     },
     window::Windows,
 };
@@ -34,6 +34,14 @@ impl Plugin for ReveUiPlugin {
 #[derive(Component)]
 pub struct SkillUiParent;
 
+/// Local enum for UI Coloring.
+#[derive(PartialEq)]
+enum CostType {
+    Mana,
+    Stamina,
+    NoCost,
+}
+
 /// Ui consumes percent of parent width.
 /// Recommended for HP, MP.<br>
 /// Value is 0 ~ 100
@@ -45,9 +53,22 @@ fn init_ui(
     textures: Res<Textures>,
     game_info: Res<GameInfo>,
     windows: Res<Windows>,
+    // champion_query: Query<&Champion, With<MyPlayer>>,
 ) {
     let windows = windows.get_primary().unwrap();
     let h = windows.height();
+    // There is no assertion that this will run after MyPlayer initiated
+    // let my = champion_query.get_single().unwrap();
+    let my = Champion::new(game_info.champion.clone(), game_info.team.clone());
+    let mut cost_type = if my.max_mp != 0. {
+        CostType::Mana
+    } else {
+        CostType::NoCost
+    };
+    // TODO : Champions using stamina(Energy)
+    if my.max_mp == 200. {
+        cost_type = CostType::Stamina;
+    }
 
     commands
         .spawn(NodeBundle {
@@ -299,7 +320,7 @@ fn init_ui(
                                 flex_direction: FlexDirection::Column,
                                 justify_content: JustifyContent::Center,
                                 size: Size {
-                                    width: Val::Percent(80.),
+                                    width: Val::Percent(90.),
                                     height: Val::Auto,
                                 },
                                 margin: UiRect::top(Val::Px(-35.)),
@@ -309,32 +330,78 @@ fn init_ui(
                         })
                         .with_children(|commands| {
                             // HP
-                            commands.spawn(NodeBundle {
-                                style: Style {
-                                    size: Size {
-                                        width: Val::Percent(100.),
-                                        height: Val::Px(15.),
+                            commands
+                                .spawn(NodeBundle {
+                                    style: Style {
+                                        size: Size {
+                                            width: Val::Percent(100.),
+                                            height: Val::Px(15.),
+                                        },
+                                        padding: UiRect::all(Val::Px(0.)),
+                                        overflow: Overflow::Hidden,
+                                        align_content: AlignContent::FlexStart,
+                                        justify_content: JustifyContent::FlexStart,
+                                        margin: UiRect::left(Val::Px(SKILL_UI_W * 0.1 / 2.)),
+                                        ..Default::default()
                                     },
-                                    margin: UiRect::left(Val::Px(SKILL_UI_W * 0.2 / 2.)),
+                                    // background_color: BackgroundColor(Color::rgba_u8(0, 255, 0, 255)),
+                                    background_color: BackgroundColor(Color::BLACK),
                                     ..Default::default()
-                                },
-                                background_color: BackgroundColor(Color::rgba_u8(0, 255, 0, 255)),
-                                ..Default::default()
-                            });
+                                })
+                                .with_children(|commands| {
+                                    commands
+                                        .spawn(NodeBundle {
+                                            style: Style {
+                                                size: Size {
+                                                    width: Val::Percent(100.),
+                                                    height: Val::Percent(100.),
+                                                },
+                                                ..Default::default()
+                                            },
+                                            background_color: BackgroundColor(Color::rgba_u8(
+                                                0, 255, 0, 255,
+                                            )),
+                                            ..Default::default()
+                                        })
+                                        .insert(PercentWidth(100.));
+                                });
 
                             // MP
-                            commands.spawn(NodeBundle {
-                                style: Style {
-                                    size: Size {
-                                        width: Val::Percent(100.),
-                                        height: Val::Px(15.),
-                                    },
-                                    margin: UiRect::left(Val::Px(SKILL_UI_W * 0.2 / 2.)),
-                                    ..Default::default()
-                                },
-                                background_color: BackgroundColor(Color::rgba_u8(0, 0, 255, 255)),
-                                ..Default::default()
-                            });
+                            if cost_type == CostType::Mana {
+                                commands
+                                    .spawn(NodeBundle {
+                                        style: Style {
+                                            size: Size {
+                                                width: Val::Percent(100.),
+                                                height: Val::Px(15.),
+                                            },
+                                            margin: UiRect::left(Val::Px(SKILL_UI_W * 0.1 / 2.)),
+                                            ..Default::default()
+                                        },
+                                        // background_color: BackgroundColor(Color::rgba_u8(
+                                        //     0, 0, 255, 255,
+                                        // )),
+                                        background_color: BackgroundColor(Color::BLACK),
+                                        ..Default::default()
+                                    })
+                                    .with_children(|commands| {
+                                        commands
+                                            .spawn(NodeBundle {
+                                                style: Style {
+                                                    size: Size {
+                                                        width: Val::Percent(100.),
+                                                        height: Val::Percent(100.),
+                                                    },
+                                                    ..Default::default()
+                                                },
+                                                background_color: BackgroundColor(Color::rgba_u8(
+                                                    0, 0, 255, 255,
+                                                )),
+                                                ..Default::default()
+                                            })
+                                            .insert(PercentWidth(100.));
+                                    });
+                            }
                         });
                 });
         });
