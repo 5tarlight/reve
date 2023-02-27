@@ -208,7 +208,9 @@ fn init_game(
         .insert(champ)
         .insert(MyPlayer)
         .insert(Velocity(ms))
-        .insert(Damagable::default());
+        .insert(Damagable::default())
+        .insert(EntityId(0));
 
-    commands.spawn_empty().insert(IdManager::new());
+    // Spawn Id Manager
+    commands.spawn_empty().insert(IdManager::from(1));
 }

@@ -1,6 +1,9 @@
 use bevy::prelude::{App, Component, Plugin, Query};
 
-use crate::{champion::Champion, ui::PercentWidth};
+use crate::{
+    champion::Champion,
+    ui::{PercentType, PercentWidth},
+};
 
 pub mod minion;
 
@@ -10,7 +13,7 @@ impl Plugin for DamageSystem {
     fn build(&self, app: &mut App) {
         app.add_system(update_champion_stat)
             .add_system(update_champion_stat)
-            .add_system(update_percentage);
+            .add_system(update_hp_percentage);
     }
 }
 
@@ -45,4 +48,15 @@ fn update_champion_stat(mut query: Query<(&Champion, &mut Damagable)>) {
     }
 }
 
-fn update_percentage(dmg_query: Query<&Damagable>, mut w_query: Query<&mut PercentWidth>) {}
+fn update_hp_percentage(
+    dmg_query: Query<(&Damagable, &EntityId)>,
+    mut w_query: Query<(&mut PercentWidth, &PercentType, &EntityId)>,
+) {
+    for (dmg, target) in dmg_query.iter() {
+        for (mut per, ptype, id) in w_query.iter_mut() {
+            if id.0 == target.0 && ptype == &PercentType::Hp {
+                per.0 = dmg.hp / dmg.max_hp * 100.;
+            }
+        }
+    }
+}

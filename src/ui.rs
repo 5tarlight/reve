@@ -4,6 +4,7 @@ use crate::{
         GameInfo, Spells, Textures, PASSIVE_ICON_SIZE, SKILL_COOL_TEXT_SIZE, SKILL_ICON_SIZE,
         SKILL_UI_H, SKILL_UI_W, SPELL_ICON_SIZE,
     },
+    entity::EntityId,
     skill::{
         SkillE, SkillP, SkillQ, SkillR, SkillStat, SkillStatus, SkillW, Spell, SpellD, SpellF,
     },
@@ -47,7 +48,13 @@ enum CostType {
 /// Recommended for HP, MP.<br>
 /// Value is 0 ~ 100
 #[derive(Component)]
-pub struct PercentWidth(f32);
+pub struct PercentWidth(pub f32);
+
+#[derive(Component, Clone, Copy, PartialEq)]
+pub enum PercentType {
+    Hp,
+    Mp,
+}
 
 fn init_ui(
     mut commands: Commands,
@@ -364,7 +371,9 @@ fn init_ui(
                                             )),
                                             ..Default::default()
                                         })
-                                        .insert(PercentWidth(100.));
+                                        .insert(PercentWidth(100.))
+                                        .insert(PercentType::Hp)
+                                        .insert(EntityId(0));
                                 });
 
                             // MP
@@ -400,7 +409,9 @@ fn init_ui(
                                                 )),
                                                 ..Default::default()
                                             })
-                                            .insert(PercentWidth(100.));
+                                            .insert(PercentWidth(100.))
+                                            .insert(PercentType::Mp)
+                                            .insert(EntityId(0));
                                     });
                             }
                         });

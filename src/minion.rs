@@ -15,6 +15,7 @@ use crate::{
         SUPER_MINION_SCALE,
     },
     movement::{MoveToPoint, Velocity},
+    setup::IdManager,
     timer::GameTimer,
 };
 
@@ -251,7 +252,8 @@ fn gen_minions(
                     ..Default::default()
                 })
                 .insert(Velocity(MINION_VEL))
-                .insert(MoveToPoint(Vec2::new(0., 0.)));
+                .insert(MoveToPoint(Vec2::new(0., 0.)))
+                .insert(IdManager::new());
 
             commands.entity(entity).despawn();
         }
