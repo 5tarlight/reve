@@ -1,6 +1,6 @@
 use bevy::prelude::{App, Component, Plugin, Query};
 
-use crate::champion::Champion;
+use crate::{champion::Champion, ui::PercentWidth};
 
 pub mod minion;
 
@@ -8,7 +8,9 @@ pub struct DamageSystem;
 
 impl Plugin for DamageSystem {
     fn build(&self, app: &mut App) {
-        app.add_system(update_champion_stat);
+        app.add_system(update_champion_stat)
+            .add_system(update_champion_stat)
+            .add_system(update_percentage);
     }
 }
 
@@ -31,6 +33,9 @@ impl Default for Damagable {
     }
 }
 
+#[derive(Component)]
+pub struct EntityId(pub u32);
+
 fn update_champion_stat(mut query: Query<(&Champion, &mut Damagable)>) {
     for (ch, mut dmg) in query.iter_mut() {
         dmg.max_hp = ch.max_hp;
@@ -39,3 +44,5 @@ fn update_champion_stat(mut query: Query<(&Champion, &mut Damagable)>) {
         dmg.ap_def = ch.def_ap;
     }
 }
+
+fn update_percentage(dmg_query: Query<&Damagable>, mut w_query: Query<&mut PercentWidth>) {}

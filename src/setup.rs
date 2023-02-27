@@ -1,7 +1,7 @@
 use bevy::{
     prelude::{
-        AssetServer, Camera2d, Camera2dBundle, Commands, Handle, Image, Plugin, Query, Res,
-        StartupStage, Transform, Vec3, With,
+        AssetServer, Camera2d, Camera2dBundle, Commands, Component, Handle, Image, Plugin, Query,
+        Res, StartupStage, Transform, Vec3, With,
     },
     sprite::SpriteBundle,
 };
@@ -16,7 +16,7 @@ use crate::{
         MARK, PORTRAIT_SCALE, RED_CASTER_MINION, RED_MELEE_MINION, RED_SIEGE_MINION,
         RED_SUPER_MINION, RIX_FONT, SMITE, TELEPORT,
     },
-    entity::Damagable,
+    entity::{Damagable, EntityId},
     movement::Velocity,
 };
 
@@ -26,6 +26,28 @@ impl Plugin for SetupPlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
         app.add_startup_system(setup)
             .add_startup_system_to_stage(StartupStage::PostStartup, init_game);
+    }
+}
+
+#[derive(Component)]
+pub struct IdManager {
+    next: u32,
+}
+
+impl IdManager {
+    pub fn new() -> Self {
+        Self { next: 0 }
+    }
+
+    pub fn get(&mut self) -> EntityId {
+        self.next += 1;
+        EntityId(self.next - 1)
+    }
+}
+
+impl From<u32> for IdManager {
+    fn from(value: u32) -> Self {
+        Self { next: value }
     }
 }
 
@@ -187,4 +209,6 @@ fn init_game(
         .insert(MyPlayer)
         .insert(Velocity(ms))
         .insert(Damagable::default());
+
+    commands.spawn_empty().insert(IdManager::new());
 }
