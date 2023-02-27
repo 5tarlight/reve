@@ -27,7 +27,8 @@ pub struct ReveUiPlugin;
 impl Plugin for ReveUiPlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
         app.add_startup_system_to_stage(StartupStage::PostStartup, init_ui)
-            .add_system(update_skill_ui_q);
+            .add_system(update_skill_ui_q)
+            .add_system(update_percentage_bar);
     }
 }
 
@@ -484,5 +485,14 @@ fn update_skill_ui_q(
             SkillStatus::NotHave => {}
             SkillStatus::StandBy => {}
         }
+    }
+}
+
+fn update_percentage_bar(mut query: Query<(&PercentWidth, &mut Style)>) {
+    for (width, mut style) in query.iter_mut() {
+        style.size = Size {
+            width: Val::Percent(width.0),
+            ..style.size.clone()
+        };
     }
 }
